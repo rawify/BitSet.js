@@ -103,7 +103,7 @@ BitSet clear(int pos)
 BitSet clear(int start, int end)
 ```
 
-** Invert/Flip either all bits, a single bit position or a range of bits**
+**Invert/Flip either all bits, a single bit position or a range of bits**
 ```
 BitSet flip()
 BitSet flip(int pos)
@@ -112,7 +112,7 @@ BitSet flip(int start, int end)
 
 Comparision functions
 ---
-**Compare (=same size and all bits equal) two BitSet objects **
+**Compare (=same size and all bits equal) two BitSet objects**
 ```
 boolean equals(BitSet x)
 ```
@@ -123,11 +123,11 @@ boolean isEmpty()
 
 Misc functions
 ---
-**Overrides the toString function for a pretty representation **
+**Overrides the toString function for a pretty representation**
 ```
 String toString(String separator="")
 ```
-** Create a 100% copy of the actual BitSet object **
+**Create a 100% copy of the actual BitSet object**
 ```
 BitSet clone()
 ```
