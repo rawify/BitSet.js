@@ -39,7 +39,7 @@ Installation
 ===
 
 ```
-npm install bitset.js
+npm install BitSet
 ```
 
 Available methods
