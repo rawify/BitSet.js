@@ -14,6 +14,15 @@ var bs = new BitSet(500); // We need 500 bits
 bs.set(128, 1); // Set bit at position 128
 ```
 
+If you need a sanity check on your own, you could write something like:
+
+```
+if (0 <= n && n < bs.size) {
+   bs.set(n, 1);
+}
+```
+
+
 Range Set
 ---
 ```javascript
@@ -132,6 +141,14 @@ String toString(String separator="")
 BitSet clone()
 ```
 
+
+Run a test
+===
+Testing the source against the shipped test suite is as easy as
+
+```
+npm test
+```
 
 Note
 ===
