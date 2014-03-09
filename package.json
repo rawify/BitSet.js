@@ -3,7 +3,7 @@
     "title": "BitSet.js",
     "version": "1.0.0",
     "homepage": "http://www.xarg.org/2014/03/javascript-bit-array/",
-    "description": "A binary array implementation",
+    "description": "A bit vector implementation",
     "keywords": ["math", "bit", "twiddle"],
     "author": "Robert Eisele <robert@xarg.org>",
     "main": "bitset",
