@@ -50,6 +50,10 @@ Installation
 ```
 npm install bitset.js
 ```
+or
+```
+bower install bitset.js
+```
 
 Available methods
 ===
