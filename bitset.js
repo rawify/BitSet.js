@@ -530,6 +530,6 @@ function BitSet(alloc) {
     };
 }
 
-if (module && module['exports']) {
+if (typeof module !== 'undefined' && module['exports']) {
     module['exports']['BitSet'] = BitSet;
 }
