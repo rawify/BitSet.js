@@ -23,6 +23,14 @@ if (0 <= n && n < bs.size) {
 ```
 
 
+Default Value Set
+---
+```javascript
+var bs = new BitSet(2, 1); // Set default value to 1
+bs.toString() == '1';
+```
+
+
 Range Set
 ---
 ```javascript

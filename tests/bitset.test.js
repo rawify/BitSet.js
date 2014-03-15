@@ -12,6 +12,7 @@ function i2s(arr) {
             str+= ", ";
         str+= arr[i];
     }
+
     return str + " }";
 }
 
@@ -32,6 +33,27 @@ describe('BitSet', function(){
     });
 
     it('500s construct INT', function(){
+
+        var bs = new BitSet(500);
+        assert.equal(bs.size, 527);
+        assert.equal(i2s(bs), '{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }');
+    });
+    
+    it('Small element construct w/ init value = 1', function(){
+
+        var bs = new BitSet(2, 1);
+        assert.equal(bs.size, 31);
+        assert.equal(i2s(bs), '{ 1 }');
+    });
+    
+    it('Small element construct w/ init value = 2', function(){
+
+        var bs = new BitSet(2, 2);
+        assert.equal(bs.size, 31);
+        assert.equal(i2s(bs), '{ 0 }');
+    });
+  
+    it('500s construct INT w/ init value = 1', function(){
 
         var bs = new BitSet(500);
         assert.equal(bs.size, 527);
