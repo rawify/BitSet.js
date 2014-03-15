@@ -11,7 +11,7 @@
  * BitSet Class
  * 
  * @param {number|String=} alloc The number of bits to use at max, or a bit-string to copy
- * @param {number} value The default value for the bits
+ * @param {number=} value The default value for the bits
  * @constructor
  **/
 function BitSet(alloc, value) {
@@ -22,7 +22,9 @@ function BitSet(alloc, value) {
         alloc = alloc['length'];
     }
     
-    value = (value === undefined || typeof value === 'string' || [0,1].indexOf(value) === -1 ? 0 : value);
+    if (value !== 1) {
+        value = 0;
+    }
 
     /**
      * @const
