@@ -43,7 +43,7 @@ describe('BitSet', function(){
 
         var bs = new BitSet(2, 1);
         assert.equal(bs.size, 31);
-        assert.equal(i2s(bs), '{ 1 }');
+        assert.equal(i2s(bs), '{ 2147483647 }');
     });
     
     it('Small element construct w/ init value = 2', function(){

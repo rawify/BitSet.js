@@ -24,6 +24,8 @@ function BitSet(alloc, value) {
     
     if (value !== 1) {
         value = 0;
+    } else {
+        value = 2147483647;
     }
 
     /**
@@ -538,3 +540,6 @@ function BitSet(alloc, value) {
 if (typeof module !== 'undefined' && module['exports']) {
     module['exports']['BitSet'] = BitSet;
 }
+
+var bs = new BitSet(2, 1); // Set default value to 1
+console.log(bs.toString())

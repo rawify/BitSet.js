@@ -26,8 +26,7 @@ if (0 <= n && n < bs.size) {
 Default Value Set
 ---
 ```javascript
-var bs = new BitSet(2, 1); // Set default value to 1
-bs.toString() == '1';
+var bs = new BitSet(2, 1); // Set all bits initially to 1
 ```
 
 
