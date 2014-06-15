@@ -148,6 +148,10 @@ boolean equals(BitSet x)
 ```
 boolean isEmpty()
 ```
+**Check if one bitset is subset of another**
+```
+boolean subsetOf(Bitset x)
+```
 
 Misc functions
 ---

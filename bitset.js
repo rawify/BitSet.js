@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v1.0.0 05/03/2014
+ * @license BitSet.js v1.0.2 15/06/2014
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2014, Robert Eisele (robert@xarg.org)
@@ -266,6 +266,29 @@ function BitSet(alloc, value) {
         return true;
     };
 
+    /**
+     * Tests if one bitset is subset of another
+     *
+     * @param {BitSet} obj BitSet object to test against
+     * @returns {boolean} true if 
+     */
+    this['subsetOf'] = function(obj) {
+        if (obj instanceof BitSet) {
+            if (obj['length'] !== length) {
+                return false;
+            }
+
+            for (var i = length; i--; ) {
+                if ((obj[i] & this[i]) !== this[i]) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Clones the actual object
