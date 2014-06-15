@@ -160,6 +160,9 @@ String toString(String separator="")
 BitSet clone()
 ```
 
+Coding Style
+===
+As every library I publish, bitset.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
 
 Run a test
 ===
