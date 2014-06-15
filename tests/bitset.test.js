@@ -333,4 +333,23 @@ describe('BitSet', function(){
 
     });
 
+    it('subsetOf - empty sets', function () {
+        var bs1 = new BitSet(10);
+        var bs2 = new BitSet(10);
+
+        assert.equal(bs1.subsetOf(bs2), true);
+        assert.equal(bs2.subsetOf(bs1), true);
+    });
+
+    it('subsetOf', function () {
+        var bs1 = new BitSet(10);
+        var bs2 = new BitSet(10);
+
+        bs1.flip(1, 2).flip(5, 6);
+        bs2.flip(1, 2);
+
+        assert.equal(bs2.subsetOf(bs1), true);
+        assert.equal(bs1.subsetOf(bs2), false);
+        assert.equal(bs1.subsetOf(bs1), true);
+    });
 });
