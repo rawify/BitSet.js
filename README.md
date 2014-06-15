@@ -148,7 +148,7 @@ boolean equals(BitSet x)
 ```
 boolean isEmpty()
 ```
-**Check if one bitset is subset of another**
+**Check if one BitSet is subset of another**
 ```
 boolean subsetOf(Bitset x)
 ```
