@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v1.0.2 15/06/2014
+ * @license BitSet.js v1.0.2 16/06/2014
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2014, Robert Eisele (robert@xarg.org)
@@ -21,7 +21,7 @@ function BitSet(alloc, value) {
     } else if (typeof alloc === 'string') {
         alloc = alloc['length'];
     }
-    
+
     if (value !== 1) {
         value = 0;
     } else {
@@ -273,7 +273,9 @@ function BitSet(alloc, value) {
      * @returns {boolean} true if 
      */
     this['subsetOf'] = function(obj) {
+
         if (obj instanceof BitSet) {
+
             if (obj['length'] !== length) {
                 return false;
             }
@@ -283,12 +285,12 @@ function BitSet(alloc, value) {
                     return false;
                 }
             }
+
         } else {
             return false;
         }
-
         return true;
-    }
+    };
 
     /**
      * Clones the actual object
@@ -563,6 +565,3 @@ function BitSet(alloc, value) {
 if (typeof module !== 'undefined' && module['exports']) {
     module['exports']['BitSet'] = BitSet;
 }
-
-var bs = new BitSet(2, 1); // Set default value to 1
-console.log(bs.toString())
