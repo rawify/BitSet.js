@@ -19,7 +19,7 @@ function BitSet(alloc, value) {
     if (alloc === undefined) {
         alloc = 31;
     } else if (typeof alloc === 'string') {
-        alloc = alloc['length'];
+        alloc = alloc.length;
     }
 
     if (value !== 1) {
@@ -46,7 +46,7 @@ function BitSet(alloc, value) {
 
     if (typeof alloc === 'string') {
 
-        for (i = alloc['length']; i--; ) {
+        for (i = alloc.length; i--; ) {
             this['set'](i, alloc.charAt(i));
         }
     }
@@ -250,14 +250,26 @@ function BitSet(alloc, value) {
 
         if (obj instanceof BitSet) {
 
-            if (obj['length'] !== length) {
-                return false;
+            var max = obj;
+            var min = this;
+
+            if (length > obj.length) {
+                max = this;
+                min = obj;
             }
 
-            for (var i = length; i--; ) {
+            var delta = max.length - min.length;
 
-                if (obj[i] !== this[i])
+            for (var i = max.length; i--; ) {
+
+                var j = i - delta;
+
+                if (j < 0) {
+                    if (max[i] !== 0)
+                        return false;
+                } else if (max[i] !== min[j]) {
                     return false;
+                }
             }
 
         } else {
