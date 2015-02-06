@@ -9,58 +9,58 @@ function i2s(arr) {
 
     for (var i = 0; i < arr.length; i++) {
         if (i > 0)
-            str+= ", ";
-        str+= arr[i];
+            str += ", ";
+        str += arr[i];
     }
 
     return str + " }";
 }
 
-describe('BitSet', function(){
+describe('BitSet', function() {
 
-    it('Small element construct', function(){
+    it('Small element construct', function() {
 
         var bs = new BitSet(2);
         assert.equal(bs.size, 31);
         assert.equal(i2s(bs), '{ 0 }');
     });
 
-    it('32s construcst', function(){
+    it('32s construcst', function() {
 
         var bs = new BitSet(32);
         assert.equal(bs.size, 62);
         assert.equal(i2s(bs), '{ 0, 0 }');
     });
 
-    it('500s construct INT', function(){
+    it('500s construct INT', function() {
 
         var bs = new BitSet(500);
         assert.equal(bs.size, 527);
         assert.equal(i2s(bs), '{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }');
     });
 
-    it('Small element construct w/ init value = 1', function(){
+    it('Small element construct w/ init value = 1', function() {
 
         var bs = new BitSet(2, 1);
         assert.equal(bs.size, 31);
         assert.equal(i2s(bs), '{ 2147483647 }');
     });
 
-    it('Small element construct w/ init value = 2', function(){
+    it('Small element construct w/ init value = 2', function() {
 
         var bs = new BitSet(2, 2);
         assert.equal(bs.size, 31);
         assert.equal(i2s(bs), '{ 0 }');
     });
 
-    it('500s construct INT w/ init value = 1', function(){
+    it('500s construct INT w/ init value = 1', function() {
 
         var bs = new BitSet(500);
         assert.equal(bs.size, 527);
         assert.equal(i2s(bs), '{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }');
     });
 
-    it('not', function(){
+    it('not', function() {
 
         var bs1 = new BitSet(64);
 
@@ -72,7 +72,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ -1, -6, -1 }');
     });
 
-    it('and', function(){
+    it('and', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -86,7 +86,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ 0, 1, 0 }');
     });
 
-    it('or', function(){
+    it('or', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -100,7 +100,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ 0, 13, 0 }');
     });
 
-    it('nand', function(){
+    it('nand', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -114,7 +114,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ -1, -2, -1 }');
     });
 
-    it('nor', function(){
+    it('nor', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -128,7 +128,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ -1, -14, -1 }');
     });
 
-    it('xor', function(){
+    it('xor', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -142,7 +142,7 @@ describe('BitSet', function(){
         assert.equal(i2s(bs1), '{ 0, 31, 0 }');
     });
 
-    it('equals', function(){
+    it('equals', function() {
 
         var bs1 = new BitSet(64);
         var bs2 = new BitSet(64);
@@ -154,11 +154,11 @@ describe('BitSet', function(){
         assert.equal(bs1.equals(bs2), true);
     });
 
-    it('equalsX', function(){
+    it('equalsX', function() {
 
         var bs1 = new BitSet(128);
         var bs2 = new BitSet(64);
-        
+
         bs1.set(15);
         bs2.set(15);
 
@@ -166,7 +166,7 @@ describe('BitSet', function(){
         assert.equal(bs1.equals(bs2), true);
     });
 
-    it('clone', function(){
+    it('clone', function() {
 
         var bs1 = new BitSet(64);
         bs1[1] = 63;
@@ -177,7 +177,7 @@ describe('BitSet', function(){
         assert.equal(bs1.equals(bs2), bs1.size == bs2.size);
     });
 
-    it('isEmpty', function(){
+    it('isEmpty', function() {
 
         var bs1 = new BitSet(500);
         var bs2 = new BitSet(500);
@@ -187,7 +187,7 @@ describe('BitSet', function(){
         assert.equal(bs1.isEmpty(bs2), !bs2.isEmpty(bs1));
     });
 
-    it('toString', function(){
+    it('toString', function() {
 
         var ex = "0000000000000000000000001111100-0000000000000000000001010011010";
 
@@ -201,7 +201,7 @@ describe('BitSet', function(){
         assert.equal("" + bs, ex.replace("-", ""));
     });
 
-    it('cardinality', function(){
+    it('cardinality', function() {
 
         var bs = new BitSet(40);
 
@@ -211,7 +211,7 @@ describe('BitSet', function(){
         assert.equal(bs.cardinality(), 9);
     });
 
-    it('msb', function(){
+    it('msb', function() {
 
         var bs = new BitSet(40);
 
@@ -221,7 +221,7 @@ describe('BitSet', function(){
         assert.equal(bs.msb(), 37);
     });
 
-    it('msb big', function(){
+    it('msb big', function() {
 
         var bs = new BitSet(500);
 
@@ -231,7 +231,7 @@ describe('BitSet', function(){
         assert.equal(bs.msb(), 333);
     });
 
-    it('set', function(){
+    it('set', function() {
 
         var bs = new BitSet(40);
 
@@ -246,13 +246,25 @@ describe('BitSet', function(){
         bs.set(33, 0); // And reset
         assert.equal(bs.toString("!"), '0000000000000000000000000000000!0000000010000000000000000010001');
 
+        assert.equal(bs.msb(), 22);
 
-        bs.set(330, 1); // Will be ignored, out of rage
+        bs.set(330, 1);
 
-        assert.equal(bs.msb(), 22); // Thus, msb is on 22
+        assert.equal(bs.msb(), 330); // Thus, msb is on 330
     });
 
-    it('get', function(){
+    it('set auto scale', function() {
+
+        var bs = new BitSet;
+
+        bs.set(512);
+
+        assert.equal(bs.get(511), 0);
+        assert.equal(bs.get(512), 1);
+        assert.equal(bs.get(513), 0);
+    });
+
+    it('get', function() {
 
         var bs = new BitSet();
 
@@ -263,7 +275,7 @@ describe('BitSet', function(){
     });
 
 
-    it('getRange', function(){
+    it('getRange', function() {
 
         var bs = new BitSet(100);
         var ex = '10011001000100110011001100110011';
@@ -274,7 +286,7 @@ describe('BitSet', function(){
         assert.equal(ex, bs.getRange(7, 38).toString().substr(-ex.length));
     });
 
-    it('setRange 1', function(){
+    it('setRange 1', function() {
 
         var bs = new BitSet(30);
 
@@ -283,7 +295,7 @@ describe('BitSet', function(){
         assert.equal(bs.toString("..."), "0000000000000000000011111111000");
     });
 
-    it('setRange 2', function(){
+    it('setRange 2', function() {
 
         var bs = new BitSet(62);
 
@@ -293,7 +305,7 @@ describe('BitSet', function(){
         assert.equal(bs.toString("!"), "1111111111111111000000000000000!0111111111111111111111111111111");
     });
 
-    it('setRange 3', function(){
+    it('setRange 3', function() {
 
         var bs = new BitSet(30);
 
@@ -302,7 +314,7 @@ describe('BitSet', function(){
         assert.equal(bs.toString("!"), "0000000000000000000111100111100");
     });
 
-    it('flip/clear 1', function(){
+    it('flip/clear 1', function() {
 
         var bs = new BitSet(40);
 
@@ -311,7 +323,7 @@ describe('BitSet', function(){
 
     });
 
-    it('flip/clear 2', function(){
+    it('flip/clear 2', function() {
 
         var bs = new BitSet(40);
 
@@ -322,7 +334,7 @@ describe('BitSet', function(){
 
     });
 
-    it('flip/clear 3', function(){
+    it('flip/clear 3', function() {
 
         var bs = new BitSet(40);
 
@@ -335,7 +347,7 @@ describe('BitSet', function(){
 
     });
 
-    it('flip range check', function(){
+    it('flip range check', function() {
 
         var bs = new BitSet(40);
 
@@ -345,7 +357,7 @@ describe('BitSet', function(){
 
     });
 
-    it('subsetOf - empty sets', function () {
+    it('subsetOf - empty sets', function() {
         var bs1 = new BitSet(10);
         var bs2 = new BitSet(10);
 
@@ -353,7 +365,7 @@ describe('BitSet', function(){
         assert.equal(bs2.subsetOf(bs1), true);
     });
 
-    it('subsetOf', function () {
+    it('subsetOf', function() {
         var bs1 = new BitSet(10);
         var bs2 = new BitSet(10);
 

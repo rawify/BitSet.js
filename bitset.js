@@ -257,7 +257,7 @@ function BitSet(alloc, value) {
                 max = this;
                 min = obj;
             }
-            
+
             for (var i = max.length; i--; ) {
 
                 if (i < min.length) {
@@ -428,19 +428,36 @@ function BitSet(alloc, value) {
      */
     this['set'] = function(ndx, value) {
 
+        if (ndx < 0) {
+            return null;
+        }
+
         if (value === undefined) {
             value = 1;
         }
 
-        if (0 <= ndx && ndx < size * length) {
+        var slot = ndx / size;
 
-            var slot = ndx / size | 0;
+        if (slot >= length) {
 
-            this[slot] ^= (1 << ndx % size) & (-(value & 1) ^ this[slot]);
+            // AUTO SCALE
 
-            return this;
+            length = Math.ceil(slot);
+
+            for (var i = this['length']; i < length; i++) {
+                this[i] = 0;
+            }
+
+            this['size'] = size * length;
+            this['length'] = length;
         }
-        return null;
+
+        slot = Math.floor(slot);
+
+        this[slot] ^= (1 << ndx % size) & (-(value & 1) ^ this[slot]);
+
+        return this;
+
     };
 
     /**
