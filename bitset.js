@@ -257,17 +257,13 @@ function BitSet(alloc, value) {
                 max = this;
                 min = obj;
             }
-
-            var delta = max.length - min.length;
-
+            
             for (var i = max.length; i--; ) {
 
-                var j = i - delta;
-
-                if (j < 0) {
-                    if (max[i] !== 0)
+                if (i < min.length) {
+                    if (max[i] !== min[i])
                         return false;
-                } else if (max[i] !== min[j]) {
+                } else if (max[i] !== 0) {
                     return false;
                 }
             }

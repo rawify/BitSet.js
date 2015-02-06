@@ -1,7 +1,7 @@
 
 var assert = require('assert');
 
-var BitSet = require('../bitset.min').BitSet;
+var BitSet = require('../bitset').BitSet;
 
 function i2s(arr) {
 
@@ -38,21 +38,21 @@ describe('BitSet', function(){
         assert.equal(bs.size, 527);
         assert.equal(i2s(bs), '{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }');
     });
-    
+
     it('Small element construct w/ init value = 1', function(){
 
         var bs = new BitSet(2, 1);
         assert.equal(bs.size, 31);
         assert.equal(i2s(bs), '{ 2147483647 }');
     });
-    
+
     it('Small element construct w/ init value = 2', function(){
 
         var bs = new BitSet(2, 2);
         assert.equal(bs.size, 31);
         assert.equal(i2s(bs), '{ 0 }');
     });
-  
+
     it('500s construct INT w/ init value = 1', function(){
 
         var bs = new BitSet(500);
@@ -149,6 +149,18 @@ describe('BitSet', function(){
 
         bs1[1] = 63;
         bs2[1] = 63;
+
+        assert.equal(bs1.equals(bs2), bs2.equals(bs1));
+        assert.equal(bs1.equals(bs2), true);
+    });
+
+    it('equalsX', function(){
+
+        var bs1 = new BitSet(128);
+        var bs2 = new BitSet(64);
+        
+        bs1.set(15);
+        bs2.set(15);
 
         assert.equal(bs1.equals(bs2), bs2.equals(bs1));
         assert.equal(bs1.equals(bs2), true);
@@ -322,11 +334,11 @@ describe('BitSet', function(){
         assert.equal(bs.toString("-"), "1111110000001111111111111100000-0011111111111111111111111111111");
 
     });
-    
+
     it('flip range check', function(){
 
         var bs = new BitSet(40);
-        
+
         assert.equal(bs.flip(-1, 0), null);
         assert.equal(bs.flip(0, 64), null);
         assert.equal(bs.flip(1, 0), null);
