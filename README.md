@@ -17,18 +17,13 @@ bs.set(128, 1); // Set bit at position 128
 If you need a sanity check on your own, you could write something like:
 
 ```
-if (bs.set(n, 1) !== null) {
-   // Success
-}
-```
-or
-
-```
 if (0 <= n && n < bs.size) {
    bs.set(n, 1);
    // Success
 }
 ```
+
+If n gets larger than bs.size, the bit array will be rescaled.
 
 
 Default Value Set

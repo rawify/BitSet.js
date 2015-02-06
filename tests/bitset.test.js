@@ -1,7 +1,7 @@
 
 var assert = require('assert');
 
-var BitSet = require('../bitset').BitSet;
+var BitSet = require('../bitset.min').BitSet;
 
 function i2s(arr) {
 

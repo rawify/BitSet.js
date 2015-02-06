@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v1.0.2 16/06/2014
+ * @license BitSet.js v1.1.0 06/02/2015
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2014, Robert Eisele (robert@xarg.org)

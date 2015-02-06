@@ -1,7 +1,7 @@
 {
     "name": "bitset.js",
     "title": "BitSet.js",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "homepage": "http://www.xarg.org/2014/03/javascript-bit-array/",
     "description": "A bit vector implementation",
     "keywords": ["math", "bit", "twiddle"],
