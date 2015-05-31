@@ -10,26 +10,27 @@ Examples
 Basic usage
 ---
 ```javascript
-var bs = new BitSet(500); // We need 500 bits
+var bs = new BitSet;
 bs.set(128, 1); // Set bit at position 128
+console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
 
-If you need a sanity check on your own, you could write something like:
-
-```
-if (0 <= n && n < bs.size) {
-   bs.set(n, 1);
-   // Success
-}
-```
-
-If n gets larger than bs.size, the bit array will be rescaled.
-
-
-Default Value Set
+User permissions
 ---
+If you want to store user permissions in your database and use BitSet for the bit twiddling, you can start with the following Linux-style snippet:
 ```javascript
-var bs = new BitSet(2, 1); // Set all bits initially to 1
+var P_READ  = 2; // Bit pos
+var P_WRITE = 1;
+var P_EXEC  = 0;
+
+var user = new BitSet;
+user.set(P_READ); // Give read perms
+user.set(P_WRITE); // Give write perms
+
+var group = new BitSet;
+var world = new BitSet;
+
+console.log("0" + user.toString(8) + group.toString(8) + world.toString());
 ```
 
 
@@ -44,12 +45,12 @@ bs.setRange(10, 18, 1); // Set a 1 between 10 and 18
 Flipping bits
 ---
 ```javascript
-var bs = new BitSet(40);
-bs.flip();
+var bs = new BitSet;
+bs.flip(0, 62);
 bs.flip(29, 35);
-var str = bs.toString("-"); // Separator every 31 bits is the dash "-"
+var str = bs.toString();
 
-if (str === "1111111111111111111111111100000-0011111111111111111111111111111") {
+if (str === "11111111111111111111111111000000011111111111111111111111111111") {
    console.log("YES!");
 }
 ```
@@ -68,31 +69,33 @@ bower install bitset.js
 Available methods
 ===
 
+The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
+
 Bitwise functions
 ---
 **Bitwise not**
 ```
-BitSet not(BitSet x)
+BitSet not(Mixed x)
 ```
 **Bitwise and**
 ```
-BitSet and(BitSet x)
+BitSet and(Mixed x)
 ```
 **Bitwise or**
 ```
-BitSet or(BitSet x)
+BitSet or(Mixed x)
 ```
 **Bitwise nand**
 ```
-BitSet nand(BitSet x)
+BitSet nand(Mixed x)
 ```
 **Bitwise nor**
 ```
-BitSet nor(BitSet x)
+BitSet nor(Mixed x)
 ```
 **Bitwise xor**
 ```
-BitSet xor(BitSet x)
+BitSet xor(Mixed x)
 ```
 **Set a bit at position index, default 1**
 ```
@@ -143,18 +146,14 @@ boolean equals(BitSet x)
 ```
 boolean isEmpty()
 ```
-**Check if one BitSet is subset of another**
-```
-boolean subsetOf(Bitset x)
-```
 
 Misc functions
 ---
 **Overrides the toString function for a pretty representation**
 ```
-String toString(String separator="")
+String toString(Number radix=2)
 ```
-**Create a 100% copy of the actual BitSet object**
+**Create a copy of the actual BitSet object**
 ```
 BitSet clone()
 ```
@@ -170,9 +169,3 @@ Testing the source against the shipped test suite is as easy as
 ```
 npm test
 ```
-
-Note
-===
-The allocated size is always a power of two minus 1! If you need 500 bits, the actual size allocated is 527 (= ceil(500 / 31)). All the additional bits are usable of course.
-
-If you want to extend the library, please provide test cases in your commit.
