@@ -1,5 +1,9 @@
 # BitSet.js 
 
+[![NPM Package](https://img.shields.io/npm/v/bitset.js.svg?style=flat)](https://npmjs.org/package/bitset.js "View this project on npm")
+[![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+
 BitSet.js is a [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementation in JavaScript.
 
 With this library, you can work on large bit vectors without worring about system constraints, given by integer size.
