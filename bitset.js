@@ -647,7 +647,7 @@
     } else if (typeof exports === 'object') {
         module['exports'] = BitSet;
     } else {
-        root['Fraction'] = BitSet;
+        root['BitSet'] = BitSet;
     }
 
 
