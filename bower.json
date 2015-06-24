@@ -22,6 +22,8 @@
         "url": "git://github.com/infusion/bitset.js.git"
     },
     "ignore": [
-        "tests"
+        "tests",
+        ".travis.yml",
+        "package.json"
     ]
 }
