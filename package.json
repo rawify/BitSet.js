@@ -5,7 +5,7 @@
     "homepage": "http://www.xarg.org/2014/03/javascript-bit-array/",
     "description": "A bit vector implementation",
     "keywords": ["math", "bit", "twiddle"],
-    "author": "Robert Eisele <robert@xarg.org>",
+    "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "bitset",
     "licenses": [{
             "type": "MIT",
