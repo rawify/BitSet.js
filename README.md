@@ -70,6 +70,25 @@ or
 bower install bitset.js
 ```
 
+Using BitSet.js with the browser
+===
+    <script src="bitset.js"></script>
+    <script>
+        console.log(BitSet("111"));
+    </script>
+
+
+Using BitSet.js with require.js
+===
+    <script src="require.js"></script>
+    <script>
+    requirejs(['bitset.js'],
+    function(BitSet) {
+        console.log(BitSet("1111"));
+    });
+    </script>
+
+
 Available methods
 ===
 
