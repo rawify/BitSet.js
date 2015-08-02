@@ -28,11 +28,12 @@
     function divide(arr, B) {
 
         var r = 0;
-        var d;
+        var d, l = arr.length;
 
-        for (var i = 0; i < arr.length; i++) {
-            d = (arr[i] + r * 2) / B | 0;
-            r = (arr[i] + r * 2) % B;
+        for (var i = 0; i < l; i++) {
+            r*= 2;
+            d = (arr[i] + r) / B | 0;
+            r = (arr[i] + r) % B;
             arr[i] = d;
         }
         return r;
@@ -356,7 +357,7 @@
         else if (2 > base || base > 36)
             throw "Invalid base";
 
-        var str = "";
+        var ret = [];
         var arr = [];
 
         // Copy to a new array
@@ -369,10 +370,10 @@
         }
 
         do {
-            str = divide(arr, base).toString(base) + str;
+            ret.unshift(divide(arr, base).toString(base));
         } while (!zero(arr));
 
-        return str;
+        return ret.join("");
     };
 
     /**
