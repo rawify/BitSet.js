@@ -88,8 +88,9 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.set(100);
-        bs.set(333);
+        bs = bs
+                .set(100)
+                .set(333);
 
         assert.equal(bs.msb(), 333);
     });
@@ -98,29 +99,38 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.set(4, 1); // Set bit on 4th pos
-        bs.set(0); // Set bit on 0th pos
-        bs.set(22, 1);
-
-        bs.set(33, 1); // Set
+        bs = bs
+                .set(4, 1) // Set bit on 4th pos
+                .set(0) // Set bit on 0th pos
+                .set(22, 1)
+                .set(33, 1); // Set
 
         assert.equal(bs.toString(), '1000000000010000000000000000010001');
 
-        bs.set(33, 0); // And reset
+        bs = bs.set(33, 0); // And reset
         assert.equal(bs.toString(), '10000000000000000010001');
 
         assert.equal(bs.msb(), 22);
 
-        bs.set(330, 1);
+        bs = bs.set(330, 1);
 
         assert.equal(bs.msb(), 330); // Thus, msb is on 330
+    });
+
+    it('string set', function() {
+
+        var bs = new BitSet;
+
+        bs = bs.set('1000000000010000000000000000010001');
+
+        assert.equal(bs.toString(), '1000000000010000000000000000010001');
     });
 
     it('set auto scale', function() {
 
         var bs = new BitSet;
 
-        bs.set(512);
+        bs = bs.set(512);
 
         assert.equal(bs.get(511), 0);
         assert.equal(bs.get(512), 1);
@@ -131,8 +141,8 @@ describe('BitSet', function() {
 
         var bs = new BitSet();
 
-        bs.set(4, 1); // Set bit on 4th pos
-        bs.set(0); // Set bit on 0th pos
+        bs = bs.set(4, 1); // Set bit on 4th pos
+        bs = bs.set(0); // Set bit on 0th pos
 
         assert.equal(bs.get(4) + bs.get(0), 2);
     });
@@ -144,7 +154,7 @@ describe('BitSet', function() {
 
         assert.equal(bs.isEmpty(), true);
 
-        bs.set(0);
+        bs = bs.set(0);
 
         assert.equal(bs.isEmpty(), false);
 
@@ -154,7 +164,7 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.setRange(3, 10);
+        bs = bs.setRange(3, 10);
 
         assert.equal(bs.toString(), "11111111000");
     });
@@ -163,8 +173,8 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.setRange(0, 70);
-        bs.setRange(30, 45, 0);
+        bs = bs.setRange(0, 70);
+        bs = bs.setRange(30, 45, 0);
 
         assert.equal(bs.toString(), "11111111111111111111111110000000000000000111111111111111111111111111111");
     });
@@ -173,7 +183,7 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.setRange(2, 12, "1111001111");
+        bs = bs.setRange(2, 12, "1111001111");
 
         assert.equal(bs.toString(), "111100111100");
     });
@@ -182,11 +192,11 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.set(60);
+        bs = bs.set(60);
 
-        bs.flip();
+        bs = bs.flip();
 
-        bs.flip(29, 35);
+        bs = bs.flip(29, 35);
         assert.equal(bs.toString(), "10111111111111111111111111000000011111111111111111111111111111");
     });
 
@@ -194,13 +204,13 @@ describe('BitSet', function() {
 
         var bs = new BitSet;
 
-        bs.set(60, 0); // Set size
+        bs = bs.set(60, 0); // Set size
 
-        bs.flip(29, 35);
+        bs = bs.flip(29, 35);
 
-        bs.flip();
+        bs = bs.flip();
 
-        bs.clear(50, 55);
+        bs = bs.clear(50, 55);
         assert.equal(bs.toString(), "11111100000011111111111111000000011111111111111111111111111111");
     });
 
@@ -211,4 +221,71 @@ describe('BitSet', function() {
         assert.equal(bs.flip(-1, 0), null);
         assert.equal(bs.flip(1, 0), null);
     });
+
+    it('should work with different length scales', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.and(b).toString(), b.and(a).toString());
+        assert.equal(a.or(b).toString(), b.or(a).toString());
+
+        assert.equal(a.nand(b).toString(), b.nand(a).toString());
+        assert.equal(a.nor(b).toString(), b.nor(a).toString());
+
+        assert.equal(a.xor(b).toString(), b.xor(a).toString());
+    });
+
+    it('should work with different length scales: and', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.and(b).toString(), b.and(a).toString());
+    });
+
+    it('should work with different length scales: or', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.or(b).toString(), b.or(a).toString());
+    });
+
+    it('should work with different length scales: nand', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.nand(b).toString(), b.nand(a).toString());
+    });
+
+    it('should work with different length scales: nor', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.nor(b).toString(), b.nor(a).toString());
+    });
+
+    it('should work with different length scales: xor', function() {
+
+        var a = new BitSet();
+        var b = new BitSet();
+        a = a.set(1);
+        b = b.set(50);
+
+        assert.equal(a.xor(b).toString(), b.xor(a).toString());
+    });
+
 });

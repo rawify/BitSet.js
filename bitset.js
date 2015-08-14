@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v2.1.0 10/06/2015
+ * @license BitSet.js v3.0.0 14/08/2015
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2014, Robert Eisele (robert@xarg.org)
@@ -141,6 +141,10 @@
      */
     function BitSet(p) {
 
+        if (!(this instanceof BitSet)) {
+            return new BitSet(p);
+        }
+
         parse(p);
         copy(this, P);
     }
@@ -161,12 +165,16 @@
      */
     BitSet.prototype['and'] = function(p) {
 
+        var res = new BitSet;
+
         parse(p);
 
-        for (var i = this['length']; i--; ) {
-            this[i] &= P[i] || 0;
+        res.length = this.length;
+
+        for (var i = res.length; i--; ) {
+            res[i] = this[i] & (P[i] || 0);
         }
-        return this;
+        return res;
     };
 
 
@@ -183,17 +191,17 @@
      * @returns {BitSet} this
      */
     BitSet.prototype['or'] = function(p) {
-      var self = this;
-      if (p.length > this.length) {
-        self = p;
-        p = this;
-      }
-      parse(p);
 
-      for (var i = self['length']; i--; ) {
-        self[i] |= P[i] || 0;
-      }
-      return self;
+        var res = new BitSet;
+
+        parse(p);
+
+        res['length'] = Math.max(this['length'], P.length);
+
+        for (var i = res['length']; i--; ) {
+            res[i] = (this[i] || 0) | (P[i] || 0);
+        }
+        return res;
     };
 
 
@@ -211,12 +219,16 @@
      */
     BitSet.prototype['nand'] = function(p) {
 
+        var res = new BitSet;
+
         parse(p);
 
-        for (var i = this['length']; i--; ) {
-            this[i] = ~(this[i] & (P[i] || 0));
+        res['length'] = Math.max(this['length'], P.length);
+
+        for (var i = res['length']; i--; ) {
+            res[i] = ~((this[i] || 0) & (P[i] || 0));
         }
-        return this;
+        return res;
     };
 
 
@@ -234,12 +246,16 @@
      */
     BitSet.prototype['nor'] = function(p) {
 
+        var res = new BitSet;
+
         parse(p);
 
-        for (var i = this['length']; i--; ) {
-            this[i] = ~(this[i] | (P[i] || 0));
+        res['length'] = Math.max(this['length'], P.length);
+
+        for (var i = res['length']; i--; ) {
+            res[i] = ~((this[i] || 0) | (P[i] || 0));
         }
-        return this;
+        return res;
     };
 
 
@@ -255,10 +271,14 @@
      */
     BitSet.prototype['not'] = function() {
 
-        for (var i = this['length']; i--; ) {
-            this[i] = ~this[i];
+        var res = new BitSet;
+
+        res['length'] = this['length'];
+
+        for (var i = res['length']; i--; ) {
+            res[i] = ~this[i];
         }
-        return this;
+        return res;
     };
 
     /**
@@ -275,12 +295,17 @@
      */
     BitSet.prototype['xor'] = function(p) {
 
+        var res = new BitSet;
+
         parse(p);
 
-        for (var i = this['length']; i--; ) {
-            this[i] = (this[i] ^ (P[i] || 0));
+        res['length'] = Math.max(this['length'], P.length);
+
+        for (var i = res['length']; i--; ) {
+
+            res[i] = ((this[i] || 0) ^ (P[i] || 0));
         }
-        return this;
+        return res;
     };
 
 
@@ -446,11 +471,13 @@
      */
     BitSet.prototype['set'] = function(ndx, value) {
 
+        var res = new BitSet;
+
         if (typeof ndx === "string") {
 
             parse(ndx);
 
-            copy(this, P);
+            copy(res, P);
 
         } else {
 
@@ -464,19 +491,14 @@
 
             var slot = Math.floor(ndx / bitsPerInt);
 
-            if (slot >= this['length']) {
+            res.length = Math.max(slot + 1, this['length']);
 
-                // AUTO SCALE
-
-                for (var i = this['length']; i < slot; i++) {
-                    this[i + 1] = 0;
-                }
-                this['length'] = slot + 1;
+            for (var i = res.length; i--; ) {
+                res[i] = this[i] || 0;
             }
-
-            this[slot] ^= (1 << ndx % bitsPerInt) & (-(value & 1) ^ this[slot]);
+            set(res, ndx, value);
         }
-        return this;
+        return res;
     };
 
     /**
@@ -495,28 +517,48 @@
      */
     BitSet.prototype['setRange'] = function(from, to, value) {
 
-        if (from <= to && 0 <= from) {
+        if (0 <= from && from <= to) {
+
+            var res = new BitSet(this);
 
             if (typeof value === "string") {
 
-                // @TODO: Performance Improvement
                 var tmp = new BitSet(value);
 
                 for (var i = from; i <= to; i++) {
-                    this['set'](i, tmp['get'](i - from));
+                    set(res, i, tmp['get'](i - from));
                 }
 
             } else {
 
-                // @TODO: Performance Improvement
+                if (value === undefined) {
+                    value = 1;
+                }
+
                 for (var i = from; i <= to; i++) {
-                    this['set'](i, value);
+                    set(res, i, value);
                 }
             }
-            return this;
+            return res;
         }
         return null;
     };
+
+    function set(dest, ndx, value) {
+
+        var slot = Math.floor(ndx / bitsPerInt);
+
+        if (slot >= dest['length']) {
+
+            // AUTO SCALE
+
+            for (var i = dest['length']; i < slot; i++) {
+                dest[i + 1] = 0;
+            }
+            dest['length'] = slot + 1;
+        }
+        dest[slot] ^= (1 << ndx % bitsPerInt) & (-(value & 1) ^ dest[slot]);
+    }
 
     /**
      * Get a single bit flag of a certain bit position
@@ -552,13 +594,12 @@
 
         if (from <= to && 0 <= from) {
 
-            // @TODO Improve
-            var tmp = new BitSet;
+            var res = new BitSet;
 
             for (var i = from; i <= to; i++) {
-                tmp['set'](i - from, this['get'](i));
+                set(res, i - from, this['get'](i));
             }
-            return tmp;
+            return res;
         }
         return null;
     };
@@ -580,28 +621,24 @@
 
         if (from === undefined) {
 
-            // Clear all
-            for (var i = this['length']; i--; ) {
-                this[i] = 0;
-            }
-
-        } else {
-
-            if (to === undefined) {
-
-                to = bitsPerInt * this['length'];
-            }
-
-            if (from > to) {
-                return null;
-            }
-
-            // @TODO improve
-            for (var i = from; i <= to; i++) {
-                this['set'](i, 0);
-            }
+            return new BitSet;
         }
-        return this;
+
+        if (to === undefined) {
+
+            to = bitsPerInt * this['length'];
+        }
+
+        if (from > to) {
+            return null;
+        }
+
+        var res = new BitSet(this);
+
+        for (var i = from; i <= to; i++) {
+            set(res, i, 0);
+        }
+        return res;
     };
 
     /**
@@ -619,11 +656,15 @@
      */
     BitSet.prototype['flip'] = function(from, to) {
 
+        var res = new BitSet;
+
         if (from === undefined) {
 
-            // Clear all
-            for (var i = this['length']; i--; ) {
-                this[i] = ~this[i];
+            res.length = this.length;
+
+            // Flip all
+            for (var i = res['length']; i--; ) {
+                res[i] = ~this[i];
             }
 
         } else {
@@ -636,13 +677,14 @@
             if (from < 0 || from > to) {
                 return null;
             }
+            
+            copy(res, this);
 
-            // @TODO improve
             for (var i = from; i <= to; i++) {
-                this['set'](i, !this['get'](i));
+                set(res, i, !this['get'](i));
             }
         }
-        return this;
+        return res;
     };
 
     if (typeof define === 'function' && define['amd']) {
@@ -654,6 +696,5 @@
     } else {
         root['BitSet'] = BitSet;
     }
-
 
 })(this);

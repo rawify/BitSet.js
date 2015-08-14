@@ -8,6 +8,8 @@ BitSet.js is a [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementatio
 
 With this library, you can work on large bit vectors without worring about system constraints, given by integer size.
 
+*NOTE:* As of version 3.0.0 BitSet.js is immutable, which means that every function call returns a new instance of the object.
+
 Examples
 ===
 
@@ -28,11 +30,11 @@ var P_WRITE = 1;
 var P_EXEC  = 0;
 
 var user = new BitSet;
-user.set(P_READ); // Give read perms
-user.set(P_WRITE); // Give write perms
+user = user.set(P_READ); // Give read perms
+user = user.set(P_WRITE); // Give write perms
 
-var group = new BitSet;
-var world = new BitSet;
+var group = new BitSet(P_READ);
+var world = new BitSet(P_EXEC);
 
 console.log("0" + user.toString(8) + group.toString(8) + world.toString());
 ```
@@ -50,8 +52,10 @@ Flipping bits
 ---
 ```javascript
 var bs = new BitSet;
-bs.flip(0, 62);
-bs.flip(29, 35);
+bs = bs
+  .flip(0, 62)
+  .flip(29, 35);
+
 var str = bs.toString();
 
 if (str === "11111111111111111111111111000000011111111111111111111111111111") {
