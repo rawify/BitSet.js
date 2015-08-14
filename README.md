@@ -17,7 +17,7 @@ Basic usage
 ---
 ```javascript
 var bs = new BitSet;
-bs.set(128, 1); // Set bit at position 128
+bs = bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
 
