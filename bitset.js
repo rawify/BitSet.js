@@ -20,7 +20,7 @@
 
     /**
      * Divide a number in base two by B
-     * 
+     *
      * @param {Array} arr
      * @param {number} B
      * @returns {number}
@@ -41,7 +41,7 @@
 
     /**
      * Check if the entire Array is empty
-     * 
+     *
      * @param {Array|Object} arr
      * @returns {boolean}
      */
@@ -57,7 +57,7 @@
 
     /**
      * Parses the parameters and set variable P
-     * 
+     *
      * @param {String|BitSet|number=} p
      */
     function parse(p) {
@@ -118,7 +118,7 @@
 
     /**
      * Copy one array to another
-     * 
+     *
      * @param {Array|Object} dst
      * @param {Array|Object} src
      */
@@ -134,7 +134,7 @@
 
     /**
      * Module entry point
-     * 
+     *
      * @constructor
      * @param {String|BitSet|number=} p
      * @returns {BitSet}
@@ -155,7 +155,7 @@
      * bs2 = new BitSet(10);
      *
      * bs1.and(bs2);
-     * 
+     *
      * @param {BitSet} p A bitset object
      * @returns {BitSet} this
      */
@@ -178,18 +178,22 @@
      * bs2 = new BitSet(10);
      *
      * bs1.or(bs2);
-     * 
+     *
      * @param {BitSet} p A bitset object
      * @returns {BitSet} this
      */
     BitSet.prototype['or'] = function(p) {
+      var self = this;
+      if (p.length > this.length) {
+        self = p;
+        p = this;
+      }
+      parse(p);
 
-        parse(p);
-
-        for (var i = this['length']; i--; ) {
-            this[i] |= P[i] || 0;
-        }
-        return this;
+      for (var i = self['length']; i--; ) {
+        self[i] |= P[i] || 0;
+      }
+      return self;
     };
 
 
@@ -201,7 +205,7 @@
      * bs2 = new BitSet(10);
      *
      * bs1.nand(bs2);
-     * 
+     *
      * @param {BitSet} p A bitset object
      * @returns {BitSet} this
      */
@@ -224,7 +228,7 @@
      * bs2 = new BitSet(10);
      *
      * bs1.or(bs2);
-     * 
+     *
      * @param {BitSet} p A bitset object
      * @returns {BitSet} this
      */
@@ -246,7 +250,7 @@
      * bs1 = new BitSet(10);
      *
      * bs1.not();
-     * 
+     *
      * @returns {BitSet} this
      */
     BitSet.prototype['not'] = function() {
@@ -265,7 +269,7 @@
      * bs2 = new BitSet(10);
      *
      * bs1.xor(bs2);
-     * 
+     *
      * @param {BitSet} p A bitset object
      * @returns {BitSet} this
      */
@@ -282,11 +286,11 @@
 
     /**
      * Compares two BitSet objects
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
-     * 
+     *
      * bs1.equals(bs2) ? 'yes' : 'no'
      *
      * @param {BitSet} p A bitset object
@@ -318,7 +322,7 @@
 
     /**
      * Clones the actual object
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
      * bs2 = bs1.clone();
@@ -332,10 +336,10 @@
 
     /**
      * Check if the BitSet is empty, means all bits are unset
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
-     * 
+     *
      * bs1.isEmpty() ? 'yes' : 'no'
      *
      * @returns {boolean} Whether the bitset is empty
@@ -378,10 +382,10 @@
 
     /**
      * Calculates the number of bits set
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
-     * 
+     *
      * var num = bs1.cardinality();
      *
      * @returns {number} The number of bits set
@@ -399,12 +403,12 @@
 
     /**
      * Calculates the Most Significant Bit / log base two
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
-     * 
+     *
      * var logbase2 = bs1.msb();
-     * 
+     *
      * var truncatedTwo = Math.pow(2, logbase2); // May overflow!
      *
      * @returns {number} The index of the highest bit set
@@ -430,10 +434,10 @@
 
     /**
      * Set a single bit flag
-     * 
+     *
      * Ex:
      * bs1 = new BitSet(10);
-     * 
+     *
      * bs1.set(3, 1);
      *
      * @param {number} ndx The index of the bit to be set
@@ -477,10 +481,10 @@
 
     /**
      * Set a range of bits
-     * 
+     *
      * Ex:
      * bs1 = new BitSet();
-     * 
+     *
      * bs1.setRange(0, 5, "01011");
      * bs1.setRange(10, 15, 1);
      *
@@ -516,11 +520,11 @@
 
     /**
      * Get a single bit flag of a certain bit position
-     * 
+     *
      * Ex:
      * bs1 = new BitSet();
      * var isValid = bs1.get(12);
-     * 
+     *
      * @param {number} ndx the index to be fetched
      * @returns {number|null} The binary flag
      */
@@ -535,14 +539,14 @@
 
     /**
      * Gets an entire range as a new bitset object
-     * 
+     *
      * Ex:
      * bs1 = new BitSet();
      * bs1.getRange(4, 8);
-     * 
+     *
      * @param {number} from The start index of the range to be get
      * @param {number} to The end index of the range to be get
-     * @returns {BitSet} A new smaller bitset object, containing the extracted range 
+     * @returns {BitSet} A new smaller bitset object, containing the extracted range
      */
     BitSet.prototype['getRange'] = function(from, to) {
 
@@ -561,13 +565,13 @@
 
     /**
      * Clear a range of bits by setting it to 0
-     * 
+     *
      * Ex:
      * bs1 = new BitSet();
      * bs1.clear(); // Clear entire set
      * bs1.clear(5); // Clear single bit
      * bs1.clar(3,10); // Clear a bit range
-     * 
+     *
      * @param {number=} from The start index of the range to be cleared
      * @param {number=} to The end index of the range to be cleared
      * @returns {BitSet} this
@@ -602,13 +606,13 @@
 
     /**
      * Flip/Invert a range of bits by setting
-     * 
+     *
      * Ex:
      * bs1 = new BitSet();
      * bs1.flip(); // Flip entire set
      * bs1.flip(5); // Flip single bit
      * bs1.flip(3,10); // Flip a bit range
-     * 
+     *
      * @param {number=} from The start index of the range to be flipped
      * @param {number=} to The end index of the range to be flipped
      * @returns {BitSet} this
