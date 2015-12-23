@@ -1,7 +1,7 @@
 
 var assert = require('assert');
 
-var BitSet = require('../bitset.min');
+var BitSet = require('../bitset');
 
 describe('BitSet', function() {
 
@@ -93,6 +93,28 @@ describe('BitSet', function() {
                 .set(333);
 
         assert.equal(bs.msb(), 333);
+    });
+
+    it('lsbit', function() {
+        assert.equal(
+            new BitSet('10000000000110001000000000').lsb(), 
+            9
+        );
+
+        assert.equal(
+            new BitSet('00000000000000000000000000').lsb(), 
+            0
+        );
+
+        assert.equal(
+            new BitSet('10000000000000000000000000').lsb(), 
+            25
+        );
+
+        assert.equal(
+            new BitSet('10000000100000000000000000000000000000000000').lsb(), 
+            35
+        );
     });
 
     it('set', function() {
