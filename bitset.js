@@ -447,7 +447,7 @@
 
             if (v) {
 
-                for (; (v >>= 1); c++) {
+                for (; (v >>>= 1); c++) {
 
                 }
                 return bitsPerInt * i + c;
