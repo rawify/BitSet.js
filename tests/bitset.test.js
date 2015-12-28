@@ -1,7 +1,7 @@
 
 var assert = require('assert');
 
-var BitSet = require('../bitset');
+var BitSet = require('../bitset.min');
 
 describe('BitSet', function() {
 
@@ -94,6 +94,12 @@ describe('BitSet', function() {
 
         assert.equal(bs.msb(), 333);
     });
+
+   it('msbit should work negative numbers', function() {
+        var flipped = new BitSet(0).flip();
+ 
+        assert.equal(flipped.msb(), 31);
+   });
 
     it('lsbit', function() {
         assert.equal(
