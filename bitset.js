@@ -458,6 +458,34 @@
 
 
     /**
+     * Calculates the Least Significant Bit
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     *
+     * var lsb = bs1.lsb();
+     *
+     * @returns {number} The index of the lowest bit set
+     */
+    BitSet.prototype['lsb'] = function() {
+
+        for (var j=0, i = this['length']; j < i; j++) {
+            var v = this[j];
+            var c = 0;
+
+            if (v) {
+                var bit = (v & -v);
+                for (; (bit >>>= 1); c++) {
+
+                }
+                return bitsPerInt * j + c;
+            }
+        }
+        return 0;
+    };
+
+
+    /**
      * Set a single bit flag
      *
      * Ex:
