@@ -7,13 +7,7 @@
     "keywords": ["math", "bit", "twiddle"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "bitset",
-    "licenses": [{
-            "type": "MIT",
-            "url": "http://www.opensource.org/licenses/MIT"
-        }, {
-            "type": "GPL",
-            "url": "http://www.opensource.org/licenses/GPL-2.0"
-        }],
+    "license": "MIT OR GPL-2.0",
     "repository": {
         "type": "git",
         "url": "http://github.com/infusion/bitset.js.git"
