@@ -1,156 +1,262 @@
 /**
- * @license BitSet.js v3.1.0 14/08/2015
+ * @license BitSet.js v4.0.0 14/08/2015
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
- * Copyright (c) 2014, Robert Eisele (robert@xarg.org)
+ * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
-
-"use strict";
-
 (function(root) {
 
-    /**
-     * @const
-     * @type number
-     */
-    var bitsPerInt = 31;
+  "use strict";
 
-    var P;
+  /**
+   * Whether BitSet should work in mutable or immutable mode
+   * 
+   * @const
+   * @type boolean
+   */
+  const MUTABLE = true;
 
-    /**
-     * Divide a number in base two by B
-     *
-     * @param {Array} arr
-     * @param {number} B
-     * @returns {number}
-     */
-    function divide(arr, B) {
+  /**
+   * Calculates the number of set bits
+   * 
+   * @param {number} v
+   */
+  function popCount(v) { // DONE
 
-        var r = 0;
-        var d, l = arr.length;
+    // Warren, H. (2009). Hacker`s Delight. New York, NY: Addison-Wesley
 
-        for (var i = 0; i < l; i++) {
-            r*= 2;
-            d = (arr[i] + r) / B | 0;
-            r = (arr[i] + r) % B;
-            arr[i] = d;
-        }
-        return r;
+    v-= ((v >>> 1) & 0x55555555);
+    v = (v & 0x33333333) + ((v >>> 2) & 0x33333333);
+    return (((v + (v >>> 4) & 0xF0F0F0F) * 0x1010101) >>> 24);
+  };
+
+  /**
+   * Divide a number in base two by B
+   *
+   * @param {Array} arr
+   * @param {number} B
+   * @returns {number}
+   */
+  function divide(arr, B) { // DONE
+
+    let r = 0;
+    let d;
+    let i = 0
+
+    for (; i < arr.length; i++) {
+      r*= 2;
+      d = (arr[i] + r) / B | 0;
+      r = (arr[i] + r) % B;
+      arr[i] = d;
+    }
+    return r;
+  }
+
+  /**
+   * Parses the parameters and set variable P
+   *
+   * @param {Object} P
+   * @param {string|BitSet|number=} val
+   */
+  function parse(P, val) { // DONE
+
+    if (val == null) {
+      P['data'] = [];
+      P['_'] = 0;
+      return;
     }
 
-    /**
-     * Check if the entire Array is empty
-     *
-     * @param {Array|Object} arr
-     * @returns {boolean}
-     */
-    function zero(arr) {
-
-        for (var i = arr.length; i--; ) {
-            if (arr[i]) {
-                return false;
-            }
-        }
-        return true;
+    if (val instanceof BitSet) {
+      P['data'] = val['data'].slice();
+      P['_'] = val['_'];
+      return;
     }
 
-    /**
-     * Parses the parameters and set variable P
-     *
-     * @param {String|BitSet|number=} p
-     */
-    function parse(p) {
+    switch (typeof val) {
 
-        P = [];
+      case 'number':
+        P['data'] = [val | 0];
+        P['_'] = 0;
+        break;
 
-        if (p === undefined) {
-            return;
+      case 'string':
+
+        let base = 2;
+        let len = 32;
+
+        if (val.indexOf('0b') === 0) {
+          val = val.substr(2);
+        } else if (val.indexOf('0x') === 0) {
+          val = val.substr(2);
+          base = 16;
+          len = 8;
         }
 
-        if (p instanceof BitSet) {
-            copy(P, p);
-            return;
-        }
+        P['data'] = [];
+        P['_'] = 0;
 
-        switch (typeof p) {
+        let a = val.length - len;
+        let b = val.length;
 
-            case 'number':
-                P[0] = p;
-                break;
+        do {
 
-            case 'string':
+          let num = parseInt(val.slice(Math.max(0, a), b), base);
 
-                var log = 1; // 2^log
+          if (isNaN(num)) {
+            throw SyntaxError('Invalid param');
+          }
 
-                if (p.indexOf('0x') === 0) {
-                    log = 4;
-                    p = p.substr(2);
-                } else if (p.indexOf('0b') === 0) {
-                    p = p.substr(2);
-                }
+          P['data'].push(num |  0);
 
-                for (var i = p.length; i--; ) {
+          if (a <= 0)
+            break;
 
-                    var n = parseInt(p.charAt(i), 1 << log);
+          a -= len;
+          b -= len;
+        } while (1);
 
-                    if (isNaN(n)) {
-                        break;
-                    }
+        break;
 
-                    for (var j = log; j--; ) {
+      default:
+        throw SyntaxError('Invalid param');
+    }
+  }
 
-                        var k = (p.length - i - 1) * log + j;
-                        var slot = Math.floor(k / bitsPerInt);
+  /**
+   * Module entry point
+   *
+   * @constructor
+   * @param {string|BitSet|number=} param
+   * @returns {BitSet}
+   */
+  function BitSet(param) { // DONE
 
-                        if (!P[slot])
-                            P[slot] = 0;
-
-                        P[slot] |= (n >> j & 1) << (k % bitsPerInt);
-                    }
-                }
-                break;
-
-            default:
-                throw 'Invalid param';
-        }
+    if (!(this instanceof BitSet)) {
+      return new BitSet(param);
     }
 
-    /**
-     * Copy one array to another
-     *
-     * @param {Array|Object} dst
-     * @param {Array|Object} src
-     */
-    function copy(dst, src) {
+    parse(this, param);
+  }
 
-        var len = Math.max(dst.length, src.length);
+  function set(dst, ndx) { // DONE
+    dst['data'][ndx >>> 5] |= 1 << ndx;
+  }
 
-        for (var i = len; i--; ) {
-            dst[i] = src[i] || 0;
-        }
-        dst.length = src.length;
+  function clear(dst, ndx) { // DONE
+    dst['data'][ndx >>> 5] &= ~(1 << ndx);
+  }
+
+  function scale(dst, ndx) { // DONE
+
+    let l = ndx >>> 5;
+    let d = dst['data'];
+    let v = dst['_'];
+
+    for (let i = d.length; i <= l; i++) {
+      d[i]  = v;
     }
+  }
+
+  function copyAndScale(dst, src, ndx) { // DONE
+
+    dst['_'] = src['_'];
+
+    let s = src['data'];
+    let d = dst['data'];
+    let v = src['_'];
+
+    for (let i = Math.max(src.length, ndx >>> 5); i >= 0; i--) {
+      d[i] = s[i] || v;
+    }
+  }
+
+  let P = {
+    'data': [],
+    '_': 0
+  };
+
+  BitSet.prototype = {
+    '_': 0,
+    'data': [],
 
     /**
-     * Module entry point
+     * Set a single bit flag
      *
-     * @constructor
-     * @param {String|BitSet|number=} p
-     * @returns {BitSet}
+     * Ex:
+     * bs1 = new BitSet(10);
+     *
+     * bs1.set(3, 1);
+     *
+     * @param {number|BitSet|string} ndx The index of the bit to be set
+     * @param {number=} value Optional value that should be set on the index (0 or 1)
+     * @returns {BitSet} this
      */
-    function BitSet(p) {
+    'set': MUTABLE ?
+      function(ndx, value) { // DONE
 
-        if (!(this instanceof BitSet)) {
-            return new BitSet(p);
+        // if the param is a string value like "0x2113"
+        if (typeof ndx === "string") {
+          parse(P, ndx);
+          this['data'] = P['data'].slice();
+          this['_'] = P['_'];
+          return this;
         }
 
-        parse(p);
-        copy(this, P);
-    }
+        // if the param is another bitset
+        if (ndx instanceof BitSet) {
+          this['data'] = ndx['data'].slice();
+          this['_'] = ndx['_'];
+          return this;
+        }
 
-    BitSet.prototype['length'] = 0; // Allocated array length
+        scale(this, ndx);
 
+        if (value === undefined || value === 1) {
+          set(this, ndx);
+        } else {
+          clear(this, ndx);
+        }
+        return this;
+
+      } : function(ndx, v) { // DONE
+
+        if (typeof ndx === "string") {
+          return new BitSet(ndx);
+        }
+
+        const im = new BitSet;
+
+        if (ndx instanceof BitSet) {
+          im['data'] = ndx['data'].slice();
+          im['_'] = ndx['_'];
+          return im;
+        }
+
+        copyAndScale(im, this, ndx);
+
+        if (v === undefined || v === 1) {
+          set(im, ndx);
+        } else {
+          clear(im, ndx);
+        }
+        return im;
+      },
+ 
+    /**
+     * Get a single bit flag of a certain bit position
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * var isValid = bs1.get(12);
+     *
+     * @param {number} ndx the index to be fetched
+     * @returns {number|null} The binary flag
+     */
+    'get': function(ndx) { // DONE
+      return ((this['data'][ndx >>> 5] || this['_']) >>> ndx) & 1;
+    },
+    
     /**
      * Creates the bitwise AND of two sets. The result is stored in-place.
      *
@@ -160,24 +266,50 @@
      *
      * bs1.and(bs2);
      *
-     * @param {BitSet} p A bitset object
+     * @param {BitSet} value A bitset object
      * @returns {BitSet} this
      */
-    BitSet.prototype['and'] = function(p) {
+    'and': MUTABLE ?
+      function(value) { // DONE
 
-        var res = new BitSet;
+        parse(P, value);
 
-        parse(p);
+        let t = this['data'];
+        let p = P['data'];
+        let d;
 
-        res.length = this.length;
-
-        for (var i = res.length; i--; ) {
-            res[i] = this[i] & (P[i] || 0);
+        if (t.length > p.length) {
+          d = P['_'];
+          this['data'] = t.map((v, i) => v & (p[i] || d));
+        } else {
+          d = this['_'];
+          this['data'] = p.map((v, i) => v & (t[i] || d));
         }
-        return res;
-    };
+        this['_'] = P['_'] & this['_'];
 
+        return this;
+      } : function(value) { // DONE
 
+        parse(P, value);
+
+        const ret = new BitSet;
+
+        let t = this['data'];
+        let p = P['data'];
+        let d;
+
+        if (t.length > p.length) {
+          d = P['_'];
+          ret['data'] = t.map((v, i) => v & (p[i] || d));
+        } else {
+          d = this['_'];
+          ret['data'] = p.map((v, i) => v & (t[i] || d));
+        }
+        ret['_'] = P['_'] & this['_'];
+
+        return ret;
+      },
+      
     /**
      * Creates the bitwise OR of two sets. The result is stored in-place.
      *
@@ -187,78 +319,103 @@
      *
      * bs1.or(bs2);
      *
-     * @param {BitSet} p A bitset object
+     * @param {BitSet} val A bitset object
      * @returns {BitSet} this
      */
-    BitSet.prototype['or'] = function(p) {
+    'or': MUTABLE ?
+      function(val) { // DONE
 
-        var res = new BitSet;
+        parse(P, val);
 
-        parse(p);
+        let t = this['data'];
+        let p = P['data'];
+        let d;
 
-        res['length'] = Math.max(this['length'], P.length);
-
-        for (var i = res['length']; i--; ) {
-            res[i] = (this[i] || 0) | (P[i] || 0);
+        if (t.length > p.length) {
+          d = P['_'];
+          this['data'] = t.map((v, i) => v | (p[i] || d));
+        } else {
+          d = this['_'];
+          this['data'] = p.map((v, i) => v | (t[i] || d));
         }
-        return res;
-    };
+        this['_'] = P['_'] | this['_'];
 
+        return this;
+      } : function(val) { // DONE
 
+        parse(P, val);
+
+        const ret = new BitSet;
+
+        let t = this['data'];
+        let p = P['data'];
+        let d;
+
+        if (t.length > p.length) {
+          d = P['_'];
+          ret['data'] = t.map((v, i) => v | (p[i] || d));
+        } else {
+          d = this['_'];
+          ret['data'] = p.map((v, i) => v | (t[i] || d));
+        }
+        ret['_'] = P['_'] | this['_'];
+
+        return ret;
+      },
+      
     /**
-     * Creates the bitwise NAND of two sets. The result is stored in-place.
+     * Creates the bitwise XOR of two sets. The result is stored in-place.
      *
      * Ex:
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.nand(bs2);
+     * bs1.xor(bs2);
      *
-     * @param {BitSet} p A bitset object
+     * @param {BitSet} val A bitset object
      * @returns {BitSet} this
      */
-    BitSet.prototype['nand'] = function(p) {
+    'xor': MUTABLE ?
+      function(val) {
 
-        var res = new BitSet;
+        parse(P, val);
 
-        parse(p);
+        let t = this['data'];
+        let p = P['data'];
+        let d;
 
-        res['length'] = Math.max(this['length'], P.length);
-
-        for (var i = res['length']; i--; ) {
-            res[i] = ~((this[i] || 0) & (P[i] || 0));
+        if (t.length > p.length) {
+          d = P['_'];
+          this['data'] = t.map((v, i) => v ^ (p[i] || d));
+        } else {
+          d = this['_'];
+          this['data'] = p.map((v, i) => v ^ (t[i] || d));
         }
-        return res;
-    };
+        this['_'] = P['_'] ^ this['_'];
 
+        return this;
+      } : function(val) {
 
-    /**
-     * Creates the bitwise NOR of two sets. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     * bs2 = new BitSet(10);
-     *
-     * bs1.or(bs2);
-     *
-     * @param {BitSet} p A bitset object
-     * @returns {BitSet} this
-     */
-    BitSet.prototype['nor'] = function(p) {
+        parse(P, val);
 
-        var res = new BitSet;
+        const ret = new BitSet;
 
-        parse(p);
+        let t = this['data'];
+        let p = P['data'];
+        let d;
 
-        res['length'] = Math.max(this['length'], P.length);
-
-        for (var i = res['length']; i--; ) {
-            res[i] = ~((this[i] || 0) | (P[i] || 0));
+        if (t.length > p.length) {
+          d = P['_'];
+          ret['data'] = t.map((v, i) => v ^ (p[i] || d));
+        } else {
+          d = this['_'];
+          ret['data'] = p.map((v, i) => v ^ (t[i] || d));
         }
-        return res;
-    };
+        ret['_'] = P['_'] ^ this['_'];
 
-
+        return ret;
+      },
+      
     /**
      * Creates the bitwise NOT of a set. The result is stored in-place.
      *
@@ -269,82 +426,23 @@
      *
      * @returns {BitSet} this
      */
-    BitSet.prototype['not'] = function() {
+    'not': MUTABLE ?
+      function() {
 
-        var res = new BitSet;
+        this['_'] = ~this['_'];
+        this['data'] = this['data'].map(x => ~x);
+        return this;
+      } : function() {
 
-        res['length'] = this['length'];
+        const im = new BitSet;
+        im['_'] = ~this['_'];
 
-        for (var i = res['length']; i--; ) {
-            res[i] = ~this[i];
-        }
-        return res;
-    };
-
-    /**
-     * Creates the bitwise XOR of two sets. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     * bs2 = new BitSet(10);
-     *
-     * bs1.xor(bs2);
-     *
-     * @param {BitSet} p A bitset object
-     * @returns {BitSet} this
-     */
-    BitSet.prototype['xor'] = function(p) {
-
-        var res = new BitSet;
-
-        parse(p);
-
-        res['length'] = Math.max(this['length'], P.length);
-
-        for (var i = res['length']; i--; ) {
-
-            res[i] = ((this[i] || 0) ^ (P[i] || 0));
-        }
-        return res;
-    };
-
-
-    /**
-     * Compares two BitSet objects
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     * bs2 = new BitSet(10);
-     *
-     * bs1.equals(bs2) ? 'yes' : 'no'
-     *
-     * @param {BitSet} p A bitset object
-     * @returns {boolean} Whether the two BitSets are similar
-     */
-    BitSet.prototype['equals'] = function(p) {
-
-        parse(p);
-
-        var max = P;
-        var min = this;
-
-        if (this['length'] > P.length) {
-            max = this;
-            min = P;
-        }
-
-        for (var i = max.length; i--; ) {
-
-            if (i < min.length) {
-                if (max[i] !== min[i])
-                    return false;
-            } else if (max[i] !== 0) {
-                return false;
-            }
-        }
-        return true;
-    };
-
+        this['data'].forEach((v, i) => {
+          im[i] = ~v;
+        });
+        return im;
+      },
+      
     /**
      * Clones the actual object
      *
@@ -354,11 +452,117 @@
      *
      * @returns {BitSet} A new BitSet object, containing a copy of the actual object
      */
-    BitSet.prototype['clone'] = function() {
+    'clone': function() {
+      return new BitSet(this);
+    },
+    /**
+     * Gets a list of set bits
+     * 
+     * @returns {Array|number}
+     */
+    'toArray': Math['clz32'] ?
+      function() {
 
-        return new BitSet(this);
-    };
+        if (this['_'] !== 0)
+          return Infinity;
 
+        let ret = [];
+        let data = this['data'];
+
+        for (let i = data.length; i-- > 0;) {
+
+          let num = data[i];
+
+          while (num !== 0) {
+            let t = 31 - Math['clz32'](num);
+            num ^= 1 << t;
+            ret.unshift((i * 32) + t);
+          }
+        }
+        return ret;
+      } : function() {
+
+        if (this['_'] !== 0)
+          return Infinity;
+
+        let ret = [];
+        let data = this['data'];
+
+        for (let i = 0; i < data.length; i++) {
+
+          let num = data[i];
+
+          while (num !== 0) {
+            let t = num & -num;
+            num ^= t;
+            ret.push((i * 32) + popCount(t - 1));
+          }
+        }
+        return ret;
+      },
+    /**
+     * Overrides the toString method to get a binary representation of the BitSet
+     *
+     * @param {number=} base
+     * @returns string A binary string
+     */
+    'toString': function(base) {
+
+      let data = this['data'];
+// TODOO:  ...1000  <=> ~111
+      if (base === undefined || base === 2) {
+
+        let ret = data.reduce(function(prev, cur, i) {
+
+          if (cur < 0) cur = Math.pow(2, 32) + cur;
+
+          cur = cur.toString(2);
+          return "0".repeat(32 - cur.length) + cur + prev;
+        }, "");
+
+        if (this['_'] === 0) {
+          return ret.replace(/^0+/, '');
+        } else {
+          return ('1111' + ret).replace(/^1+/, '...1111');
+        }
+
+
+      } else if (base === 16) {
+
+        let ret = data.reduce(function(prev, cur, i) {
+
+          if (cur < 0) cur = Math.pow(2, 32) + cur;
+
+          cur = cur.toString(16);
+          return "0".repeat(8 - cur.length) + cur + prev;
+        }, "");
+// TODO
+        return ret.replace(/^0+/, '');
+
+      }
+
+
+      if (2 > base || base > 36)
+        throw "Invalid base";
+
+      let ret = [];
+      let arr = [];
+
+      // Copy to a new array
+      for (let i = data.length; i--;) {
+
+        for (let j = 32; j--;) {
+
+          arr.push(data[i] >>> j & 1);
+        }
+      }
+// TODO
+      do {
+        ret.unshift(divide(arr, base).toString(base));
+      } while (!arr.every(x => x === 0));
+
+      return ret.join("");
+    },
     /**
      * Check if the BitSet is empty, means all bits are unset
      *
@@ -369,42 +573,9 @@
      *
      * @returns {boolean} Whether the bitset is empty
      */
-    BitSet.prototype['isEmpty'] = function() {
-
-        return zero(this);
-    };
-
-    /**
-     * Overrides the toString method to get a binary representation of the BitSet
-     *
-     * @returns string A binary string
-     */
-    BitSet.prototype['toString'] = function(base) {
-
-        if (!base)
-            base = 2;
-        else if (2 > base || base > 36)
-            throw "Invalid base";
-
-        var ret = [];
-        var arr = [];
-
-        // Copy to a new array
-        for (var i = this['length']; i--; ) {
-
-            for (var j = bitsPerInt; j--; ) {
-
-                arr.push(this[i] >> j & 1);
-            }
-        }
-
-        do {
-            ret.unshift(divide(arr, base).toString(base));
-        } while (!zero(arr));
-
-        return ret.join("");
-    };
-
+    'isEmpty': function() {
+      return this['_'] === 0 && this['data'].every(x => x === 0);
+    },
     /**
      * Calculates the number of bits set
      *
@@ -415,17 +586,13 @@
      *
      * @returns {number} The number of bits set
      */
-    BitSet.prototype['cardinality'] = function() {
+    'cardinality': function() {
 
-        for (var n, num = 0, i = this['length']; i--; ) {
-
-            for (n = this[i]; n; n &= n - 1, num++) {
-            }
-        }
-        return num;
-    };
-
-
+      if (this['_'] !== 0) {
+        return Infinity;
+      }
+      return this['data'].reduce((p, n) => p + popCount(n), 0);
+    },
     /**
      * Calculates the Most Significant Bit / log base two
      *
@@ -438,200 +605,85 @@
      *
      * @returns {number} The index of the highest bit set
      */
-    BitSet.prototype['msb'] = function() {
+    'msb': Math['clz32'] ?
+      function() {
 
-        for (var i = this['length']; i--; ) {
-
-            var v = this[i];
-            var c = 0;
-
-            if (v) {
-
-                for (; (v >>>= 1); c++) {
-
-                }
-                return bitsPerInt * i + c;
-            }
+        if (this['_'] !== 0) {
+          return Infinity;
         }
-        return 0;
-    };
 
+        let data = this['data'];
 
+        for (let i = data.length; i-- > 0;) {
+
+          let c = Math['clz32'](data[i]);
+
+          if (c !== 32) {
+            return (i * 32) + 31 - c;
+          }
+        }
+        return Infinity;
+      } : function() {
+
+        if (this['_'] !== 0) {
+          return Infinity;
+        }
+
+        let data = this['data'];
+
+        for (let i = data.length; i-- > 0;) {
+
+          let v = data[i];
+          let c = 0;
+
+          if (v) {
+
+            for (;
+              (v >>>= 1) > 0; c++) {}
+            return (i * 32) + c;
+          }
+        }
+        return Infinity;
+      },
     /**
-     * Calculates the Least Significant Bit
+     * Calculates the number of trailing zeros
      *
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var lsb = bs1.lsb();
+     * var ntz = bs1.ntz();
      *
      * @returns {number} The index of the lowest bit set
      */
-    BitSet.prototype['lsb'] = function() {
+    'ntz': function() {
 
-        for (var j=0, i = this['length']; j < i; j++) {
-            var v = this[j];
-            var c = 0;
+      let data = this['data'];
 
-            if (v) {
-                var bit = (v & -v);
-                for (; (bit >>>= 1); c++) {
+      for (let j = 0, i = data.length; j < i; j++) {
+        let v = data[j];
+        let c = 0;
 
-                }
-                return bitsPerInt * j + c;
-            }
+        if (v) {
+
+          v = (v ^ (v - 1)) >>> 1; // Set v's trailing 0s to 1s and zero rest
+
+          return (j * 32) + popCount(v);
         }
-        return 0;
-    };
-
-
-    /**
-     * Set a single bit flag
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     *
-     * bs1.set(3, 1);
-     *
-     * @param {number} ndx The index of the bit to be set
-     * @param {number=} value Optional value that should be set on the index (0 or 1)
-     * @returns {BitSet} this
-     */
-    BitSet.prototype['set'] = function(ndx, value) {
-
-        var res = new BitSet;
-
-        if (typeof ndx === "string") {
-
-            parse(ndx);
-
-            copy(res, P);
-
-        } else {
-
-            if (ndx < 0) {
-                return null;
-            }
-
-            if (value === undefined) {
-                value = 1;
-            }
-
-            var slot = Math.floor(ndx / bitsPerInt);
-
-            res.length = Math.max(slot + 1, this['length']);
-
-            for (var i = res.length; i--; ) {
-                res[i] = this[i] || 0;
-            }
-            set(res, ndx, value);
-        }
-        return res;
-    };
-
-    /**
-     * Set a range of bits
-     *
-     * Ex:
-     * bs1 = new BitSet();
-     *
-     * bs1.setRange(0, 5, "01011");
-     * bs1.setRange(10, 15, 1);
-     *
-     * @param {number} from The start index of the range to be set
-     * @param {number} to The end index of the range to be set
-     * @param {number|String=} value Optional value that should be set on the index (0 or 1), or a bit string of the length of the window
-     * @returns {BitSet} this
-     */
-    BitSet.prototype['setRange'] = function(from, to, value) {
-
-        if (0 <= from && from <= to) {
-
-            var res = new BitSet(this);
-
-            if (typeof value === "string") {
-
-                var tmp = new BitSet(value);
-
-                for (var i = from; i <= to; i++) {
-                    set(res, i, tmp['get'](i - from));
-                }
-
-            } else {
-
-                if (value === undefined) {
-                    value = 1;
-                }
-
-                for (var i = from; i <= to; i++) {
-                    set(res, i, value);
-                }
-            }
-            return res;
-        }
-        return null;
-    };
-
-    function set(dest, ndx, value) {
-
-        var slot = Math.floor(ndx / bitsPerInt);
-
-        if (slot >= dest['length']) {
-
-            // AUTO SCALE
-
-            for (var i = dest['length']; i < slot; i++) {
-                dest[i + 1] = 0;
-            }
-            dest['length'] = slot + 1;
-        }
-        dest[slot] ^= (1 << ndx % bitsPerInt) & (-(value & 1) ^ dest[slot]);
-    }
-
-    /**
-     * Get a single bit flag of a certain bit position
-     *
-     * Ex:
-     * bs1 = new BitSet();
-     * var isValid = bs1.get(12);
-     *
-     * @param {number} ndx the index to be fetched
-     * @returns {number|null} The binary flag
-     */
-    BitSet.prototype['get'] = function(ndx) {
-
-        if (0 <= ndx && ndx < bitsPerInt * this['length']) {
-
-            return (this[ndx / bitsPerInt | 0] >> (ndx % bitsPerInt)) & 1;
-        }
-        return 0;
-    };
-
+      }
+      return Infinity;
+    },
     /**
      * Gets an entire range as a new bitset object
      *
      * Ex:
      * bs1 = new BitSet();
-     * bs1.getRange(4, 8);
+     * bs1.slice(4, 8);
      *
      * @param {number} from The start index of the range to be get
      * @param {number} to The end index of the range to be get
      * @returns {BitSet} A new smaller bitset object, containing the extracted range
      */
-    BitSet.prototype['getRange'] = function(from, to) {
-
-        if (from <= to && 0 <= from) {
-
-            var res = new BitSet;
-
-            for (var i = from; i <= to; i++) {
-                set(res, i - from, this['get'](i));
-            }
-            return res;
-        }
-        return null;
-    };
-
+    'slice': null,
     /**
      * Clear a range of bits by setting it to 0
      *
@@ -645,30 +697,32 @@
      * @param {number=} to The end index of the range to be cleared
      * @returns {BitSet} this
      */
-    BitSet.prototype['clear'] = function(from, to) {
+    'clear': MUTABLE ?
+      function(from, to) {
 
-        if (from === undefined) {
-
-            return new BitSet;
+        if (from === undefined && to === undefined) {
+          this['data'] = [];
+          this['_'] = 0;
+        } else if (!isNaN(from) && to === undefined) {
+          scale(this, from);
+          clear(this, from);
         }
 
-        if (to === undefined) {
+        return this;
+      } : function(from, to) {
 
-            to = bitsPerInt * this['length'];
+        let im = new BitSet;
+
+        if (from === undefined && to === undefined) {
+          im['data'] = [];
+          im['_'] = 0;
+        } else if (!isNaN(from) && to === undefined) {
+          copyAndScale(im, this, from);
+          clear(im, from);
         }
 
-        if (from > to) {
-            return null;
-        }
-
-        var res = new BitSet(this);
-
-        for (var i = from; i <= to; i++) {
-            set(res, i, 0);
-        }
-        return res;
-    };
-
+        return im;
+      },
     /**
      * Flip/Invert a range of bits by setting
      *
@@ -682,47 +736,56 @@
      * @param {number=} to The end index of the range to be flipped
      * @returns {BitSet} this
      */
-    BitSet.prototype['flip'] = function(from, to) {
+    'flip': null,
+    /**
+     * Compares two BitSet objects
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     * bs2 = new BitSet(10);
+     *
+     * bs1.equals(bs2) ? 'yes' : 'no'
+     *
+     * @param {BitSet} p A bitset object
+     * @returns {boolean} Whether the two BitSets are similar
+     */
+    'equals': function(p) {
 
-        var res = new BitSet;
+      parse(P, p);
 
-        if (from === undefined) {
+      if (P['_'] !== this['_']) {
+        return false;
+      }
 
-            res.length = this.length;
+      let max = P['data'];
+      let min = this['data'];
 
-            // Flip all
-            for (var i = res['length']; i--; ) {
-                res[i] = ~this[i];
-            }
+      if (min.length > max.length) {
+        max = this;
+        min = P;
+      }
 
-        } else {
+      for (let i = max.length; i--;) {
 
-            if (to === undefined) {
-
-                to = bitsPerInt * this['length'];
-            }
-
-            if (from < 0 || from > to) {
-                return null;
-            }
-            
-            copy(res, this);
-
-            for (var i = from; i <= to; i++) {
-                set(res, i, !this['get'](i));
-            }
+        if (i < min.length) {
+          if (max[i] !== min[i])
+            return false;
+        } else if (max[i] !== 0) {
+          return false;
         }
-        return res;
-    };
-
-    if (typeof define === 'function' && define['amd']) {
-        define([], function() {
-            return BitSet;
-        });
-    } else if (typeof exports === 'object') {
-        module['exports'] = BitSet;
-    } else {
-        root['BitSet'] = BitSet;
+      }
+      return true;
     }
+  };
+
+  if (typeof define === 'function' && define['amd']) {
+    define([], function() {
+      return BitSet;
+    });
+  } else if (typeof exports === 'object') {
+    module['exports'] = BitSet;
+  } else {
+    root['BitSet'] = BitSet;
+  }
 
 })(this);

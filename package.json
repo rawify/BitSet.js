@@ -1,12 +1,13 @@
 {
     "name": "bitset.js",
     "title": "BitSet.js",
-    "version": "3.1.0",
+    "version": "4.0.0",
     "homepage": "http://www.xarg.org/2014/03/javascript-bit-array/",
-    "description": "A bit vector implementation",
-    "keywords": ["math", "bit", "twiddle"],
+    "description": "An infinite bit vector library",
+    "keywords": ["math", "bit", "set", "twiddle", "bit array", "binary", "bit vector", "bitset", "bitmap", "bitstring"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "bitset",
+    "readmeFilename": "README.md",
     "license": "MIT OR GPL-2.0",
     "repository": {
         "type": "git",
@@ -19,6 +20,7 @@
         "test": "mocha tests/*.js"
     },
     "devDependencies": {
-        "mocha": "*"
+        "mocha": "*",
+        "should": "*"
     }
 }
