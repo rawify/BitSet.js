@@ -391,14 +391,15 @@
             throw 'Invalid base';
 
         var ret = [];
-        var arr = [];
+        var arr = new Array(this['length'] * bitsPerInt);
 
         // Copy to a new array
+        var index = 0;
         for (var i = this['length']; i--; ) {
 
-            for (var j = bitsPerInt; j--; ) {
+            for (var j = bitsPerInt; j--; index++) {
 
-                arr.push(this[i] >> j & 1);
+                arr[index] = this[i] >> j & 1;
             }
         }
 
