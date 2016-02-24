@@ -1,4 +1,4 @@
-# BitSet.js 
+# BitSet.js
 
 [![NPM Package](https://img.shields.io/npm/v/bitset.js.svg?style=flat)](https://npmjs.org/package/bitset.js "View this project on npm")
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
@@ -188,6 +188,15 @@ BitSet clone()
 Coding Style
 ===
 As every library I publish, bitset.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
+
+Building the library
+===
+We use Gulp to invoke Google Closure Compiler on the code:
+
+```
+npm install
+gulp
+```
 
 Run a test
 ===
