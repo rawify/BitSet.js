@@ -6,9 +6,13 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 
-"use strict";
+/**
+ * @fileoverview A Bit-Vector implementation in JavaScript.
+ * @author robert@xarg.org (Robert Eisele)
+ */
 
 (function(root) {
+    'use strict';
 
     /**
      * @const
@@ -58,7 +62,7 @@
     /**
      * Parses the parameters and set variable P
      *
-     * @param {String|BitSet|number=} p
+     * @param {string|BitSet|number=} p
      */
     function parse(p) {
 
@@ -136,7 +140,7 @@
      * Module entry point
      *
      * @constructor
-     * @param {String|BitSet|number=} p
+     * @param {string|BitSet|number=} p
      * @returns {BitSet}
      */
     function BitSet(p) {
@@ -377,14 +381,14 @@
     /**
      * Overrides the toString method to get a binary representation of the BitSet
      *
-     * @returns string A binary string
+     * @returns {string} A binary string
      */
     BitSet.prototype['toString'] = function(base) {
 
         if (!base)
             base = 2;
         else if (2 > base || base > 36)
-            throw "Invalid base";
+            throw 'Invalid base';
 
         var ret = [];
         var arr = [];
@@ -402,7 +406,7 @@
             ret.unshift(divide(arr, base).toString(base));
         } while (!zero(arr));
 
-        return ret.join("");
+        return ret.join('');
     };
 
     /**
@@ -501,7 +505,7 @@
 
         var res = new BitSet;
 
-        if (typeof ndx === "string") {
+        if (typeof ndx === 'string') {
 
             parse(ndx);
 
@@ -535,12 +539,12 @@
      * Ex:
      * bs1 = new BitSet();
      *
-     * bs1.setRange(0, 5, "01011");
+     * bs1.setRange(0, 5, '01011');
      * bs1.setRange(10, 15, 1);
      *
      * @param {number} from The start index of the range to be set
      * @param {number} to The end index of the range to be set
-     * @param {number|String=} value Optional value that should be set on the index (0 or 1), or a bit string of the length of the window
+     * @param {number|string=} value Optional value that should be set on the index (0 or 1), or a bit string of the length of the window
      * @returns {BitSet} this
      */
     BitSet.prototype['setRange'] = function(from, to, value) {
@@ -549,7 +553,7 @@
 
             var res = new BitSet(this);
 
-            if (typeof value === "string") {
+            if (typeof value === 'string') {
 
                 var tmp = new BitSet(value);
 
@@ -705,7 +709,7 @@
             if (from < 0 || from > to) {
                 return null;
             }
-            
+
             copy(res, this);
 
             for (var i = from; i <= to; i++) {
