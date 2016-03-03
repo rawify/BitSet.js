@@ -18,9 +18,24 @@
   const MUTABLE = true;
 
   /**
+   * The number of bits of a word
+   * @const
+   * @type number
+   */
+  const WORD_LENGTH = 32;
+  
+  /**
+   * The log base 2 of WORD_LENGTH
+   * @const
+   * @type number
+   */
+  const WORD_LOG = 5;
+
+  /**
    * Calculates the number of set bits
    * 
    * @param {number} v
+   * @returns {number}
    */
   function popCount(v) { // DONE
 
@@ -62,7 +77,7 @@
   function parse(P, val) { // DONE
 
     if (val == null) {
-      P['data'] = [];
+      P['data'] = [0, 0, 0, 0, 0, 0];
       P['_'] = 0;
       return;
     }
@@ -83,7 +98,7 @@
       case 'string':
 
         let base = 2;
-        let len = 32;
+        let len = WORD_LENGTH;
 
         if (val.indexOf('0b') === 0) {
           val = val.substr(2);
@@ -140,21 +155,21 @@
   }
 
   function set(dst, ndx) { // DONE
-    dst['data'][ndx >>> 5] |= 1 << ndx;
+    dst['data'][ndx >>> WORD_LOG] |= 1 << ndx;
   }
 
   function clear(dst, ndx) { // DONE
-    dst['data'][ndx >>> 5] &= ~(1 << ndx);
+    dst['data'][ndx >>> WORD_LOG] &= ~(1 << ndx);
   }
 
   function scale(dst, ndx) { // DONE
 
-    let l = ndx >>> 5;
+    let l = ndx >>> WORD_LOG;
     let d = dst['data'];
     let v = dst['_'];
 
     for (let i = d.length; i <= l; i++) {
-      d[i]  = v;
+      d[i] = v;
     }
   }
 
@@ -166,7 +181,7 @@
     let d = dst['data'];
     let v = src['_'];
 
-    for (let i = Math.max(src.length, ndx >>> 5); i >= 0; i--) {
+    for (let i = Math.max(src.length, ndx >>> WORD_LOG); i >= 0; i--) {
       d[i] = s[i] || v;
     }
   }
@@ -219,7 +234,7 @@
         }
         return this;
 
-      } : function(ndx, v) { // DONE
+      } : function(ndx, value) { // DONE
 
         if (typeof ndx === "string") {
           return new BitSet(ndx);
@@ -254,7 +269,7 @@
      * @returns {number|null} The binary flag
      */
     'get': function(ndx) { // DONE
-      return ((this['data'][ndx >>> 5] || this['_']) >>> ndx) & 1;
+      return ((this['data'][ndx >>> WORD_LOG] || this['_']) >>> ndx) & 1;
     },
     
     /**
@@ -426,7 +441,7 @@
      *
      * @returns {BitSet} this
      */
-    'not': MUTABLE ?
+    'not': MUTABLE ? // invert()
       function() {
 
         this['_'] = ~this['_'];
@@ -476,7 +491,7 @@
           while (num !== 0) {
             let t = 31 - Math['clz32'](num);
             num ^= 1 << t;
-            ret.unshift((i * 32) + t);
+            ret.unshift((i * WORD_LENGTH) + t);
           }
         }
         return ret;
@@ -495,7 +510,7 @@
           while (num !== 0) {
             let t = num & -num;
             num ^= t;
-            ret.push((i * 32) + popCount(t - 1));
+            ret.push((i * WORD_LENGTH) + popCount(t - 1));
           }
         }
         return ret;
@@ -514,10 +529,10 @@
 
         let ret = data.reduce(function(prev, cur, i) {
 
-          if (cur < 0) cur = Math.pow(2, 32) + cur;
+          if (cur < 0) cur = Math.pow(2, WORD_LENGTH) + cur;
 
           cur = cur.toString(2);
-          return "0".repeat(32 - cur.length) + cur + prev;
+          return "0".repeat(WORD_LENGTH - cur.length) + cur + prev;
         }, "");
 
         if (this['_'] === 0) {
@@ -526,19 +541,25 @@
           return ('1111' + ret).replace(/^1+/, '...1111');
         }
 
-
       } else if (base === 16) {
 
         let ret = data.reduce(function(prev, cur, i) {
 
-          if (cur < 0) cur = Math.pow(2, 32) + cur;
+          if (cur < 0) cur = Math.pow(2, WORD_LENGTH) + cur;
 
           cur = cur.toString(16);
           return "0".repeat(8 - cur.length) + cur + prev;
         }, "");
 // TODO
         return ret.replace(/^0+/, '');
-
+      } else if (base === 256) {
+        
+        let ret = data.reduce(function(prev, cur, i) {
+          
+          // TODO
+          
+        });
+        
       }
 
 
@@ -551,7 +572,7 @@
       // Copy to a new array
       for (let i = data.length; i--;) {
 
-        for (let j = 32; j--;) {
+        for (let j = WORD_LENGTH; j--;) {
 
           arr.push(data[i] >>> j & 1);
         }
@@ -618,8 +639,8 @@
 
           let c = Math['clz32'](data[i]);
 
-          if (c !== 32) {
-            return (i * 32) + 31 - c;
+          if (c !== WORD_LENGTH) {
+            return (i * WORD_LENGTH) + WORD_LENGTH - 1 - c;
           }
         }
         return Infinity;
@@ -640,7 +661,7 @@
 
             for (;
               (v >>>= 1) > 0; c++) {}
-            return (i * 32) + c;
+            return (i * WORD_LENGTH) + c;
           }
         }
         return Infinity;
@@ -667,7 +688,7 @@
 
           v = (v ^ (v - 1)) >>> 1; // Set v's trailing 0s to 1s and zero rest
 
-          return (j * 32) + popCount(v);
+          return (j * WORD_LENGTH) + popCount(v);
         }
       }
       return Infinity;
@@ -736,7 +757,7 @@
      * @param {number=} to The end index of the range to be flipped
      * @returns {BitSet} this
      */
-    'flip': null,
+    'flip': null, // toggle
     /**
      * Compares two BitSet objects
      *
