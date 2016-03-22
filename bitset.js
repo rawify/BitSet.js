@@ -363,6 +363,25 @@
 
       return this;
     },
+    'andNot': function(val) { // difference
+
+      parse(P, val);
+
+      var t = this['data'];
+      var p = P['data'];
+
+      var t_ = this['_'];
+      var p_ = P['_'];
+
+      var l = Math.min(t.length, p.length);
+
+      for (var k = 0; k < l; k++) {
+        t[k] &= ~p[k];
+      }
+      this['_'] &= ~p_;
+      
+      return this;
+    },
     /**
      * Clones the actual object
      *
@@ -386,46 +405,46 @@
      * @returns {Array|number}
      */
     'toArray': Math['clz32'] ?
-    function() {
+            function() {
 
-      if (this['_'] !== 0)
-        return Infinity;
+              if (this['_'] !== 0)
+                return Infinity;
 
-      var ret = [];
-      var data = this['data'];
+              var ret = [];
+              var data = this['data'];
 
-      for (var i = data.length - 1; i >= 0; i--) {
+              for (var i = data.length - 1; i >= 0; i--) {
 
-        var num = data[i];
+                var num = data[i];
 
-        while (num !== 0) {
-          var t = 31 - Math['clz32'](num);
-          num ^= 1 << t;
-          ret.unshift((i * WORD_LENGTH) + t);
-        }
-      }
-      return ret;
-    } :
-    function() {
+                while (num !== 0) {
+                  var t = 31 - Math['clz32'](num);
+                  num ^= 1 << t;
+                  ret.unshift((i * WORD_LENGTH) + t);
+                }
+              }
+              return ret;
+            } :
+            function() {
 
-      if (this['_'] !== 0)
-        return Infinity;
+              if (this['_'] !== 0)
+                return Infinity;
 
-      var ret = [];
-      var data = this['data'];
+              var ret = [];
+              var data = this['data'];
 
-      for (var i = 0; i < data.length; i++) {
+              for (var i = 0; i < data.length; i++) {
 
-        var num = data[i];
+                var num = data[i];
 
-        while (num !== 0) {
-          var t = num & -num;
-          num ^= t;
-          ret.push((i * WORD_LENGTH) + popCount(t - 1));
-        }
-      }
-      return ret;
-    },
+                while (num !== 0) {
+                  var t = num & -num;
+                  num ^= t;
+                  ret.push((i * WORD_LENGTH) + popCount(t - 1));
+                }
+              }
+              return ret;
+            },
     /**
      * Check if the BitSet is empty, means all bits are unset
      *
@@ -487,46 +506,46 @@
      * @returns {number} The index of the highest bit set
      */
     'msb': Math['clz32'] ?
-    function() {
+            function() {
 
-      if (this['_'] !== 0) {
-        return Infinity;
-      }
+              if (this['_'] !== 0) {
+                return Infinity;
+              }
 
-      var data = this['data'];
+              var data = this['data'];
 
-      for (var i = data.length; i-- > 0; ) {
+              for (var i = data.length; i-- > 0; ) {
 
-        var c = Math['clz32'](data[i]);
+                var c = Math['clz32'](data[i]);
 
-        if (c !== WORD_LENGTH) {
-          return (i * WORD_LENGTH) + WORD_LENGTH - 1 - c;
-        }
-      }
-      return Infinity;
-    } :
-    function() {
+                if (c !== WORD_LENGTH) {
+                  return (i * WORD_LENGTH) + WORD_LENGTH - 1 - c;
+                }
+              }
+              return Infinity;
+            } :
+            function() {
 
-      if (this['_'] !== 0) {
-        return Infinity;
-      }
+              if (this['_'] !== 0) {
+                return Infinity;
+              }
 
-      var data = this['data'];
+              var data = this['data'];
 
-      for (var i = data.length; i-- > 0; ) {
+              for (var i = data.length; i-- > 0; ) {
 
-        var v = data[i];
-        var c = 0;
+                var v = data[i];
+                var c = 0;
 
-        if (v) {
+                if (v) {
 
-          for (; (v >>>= 1) > 0; c++) {
-          }
-          return (i * WORD_LENGTH) + c;
-        }
-      }
-      return Infinity;
-    },
+                  for (; (v >>>= 1) > 0; c++) {
+                  }
+                  return (i * WORD_LENGTH) + c;
+                }
+              }
+              return Infinity;
+            },
     /**
      * Calculates the number of trailing zeros
      *
