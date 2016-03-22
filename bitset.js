@@ -363,6 +363,18 @@
 
       return this;
     },
+    /**
+     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     * bs2 = new BitSet(10);
+     *
+     * bs1.notAnd(bs2);
+     *
+     * @param {BitSet} val A bitset object
+     * @returns {BitSet} this
+     */
     'andNot': function(val) { // difference
 
       parse(P, val);
