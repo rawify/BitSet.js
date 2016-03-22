@@ -4,7 +4,7 @@
     "version": "4.0.0",
     "homepage": "http://www.xarg.org/2014/03/javascript-bit-array/",
     "description": "A performance optimized infinite bit vector library",
-    "keywords": ["math", "bit", "set", "twiddle", "bit array", "binary", "bit vector", "bitset", "bitmap", "bitstring"],
+    "keywords": ["bit", "set", "twiddle", "bit array", "binary", "bit vector", "bitset", "bitmap", "bitstring", "bitwise"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "bitset",
     "readmeFilename": "README.md",

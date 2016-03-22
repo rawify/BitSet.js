@@ -8,7 +8,7 @@ BitSet.js is a [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementatio
 
 With this library, you can work on large bit vectors without worring about system constraints, given by integer size.
 
-*NOTE:* As of version 3.0.0 BitSet.js is immutable, which means that every function call returns a new instance of the object.
+*NOTE:* As of version v4.0.0, BitSet.js is mutable, which means that the object gets changed by method invocations. In order to work on explicit copies, use `clone()`.
 
 Examples
 ===
@@ -67,7 +67,7 @@ Installation
 ===
 
 ```
-npm install bitset.js
+npm install --save bitset.js
 ```
 or
 ```
