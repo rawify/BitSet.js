@@ -111,6 +111,30 @@
                 }
                 break;
 
+            case 'object':
+                if (p instanceof Uint8Array) {
+                    var bits = 8;
+
+                    for (var i = 0; i < p.length; i++)
+                    {
+                        n = p[i];
+                        for (var j = 0; j < bits; j++) {
+
+                            var k = i * bits + j;
+                            var slot = Math.floor(k / bitsPerInt);
+
+                            if (!P[slot])
+                                P[slot] = 0;
+
+                            P[slot] |= (n >> j & 1) << (k % bitsPerInt);
+                        }
+                    }
+                }
+                else {
+                    throw 'Invalid param';
+                }
+                break;
+
             default:
                 throw 'Invalid param';
         }
@@ -654,7 +678,7 @@
 
         if (to === undefined) {
 
-            to = bitsPerInt * this['length'];
+            to = from;
         }
 
         if (from > to) {
