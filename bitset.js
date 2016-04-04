@@ -395,6 +395,48 @@
       return this;
     },
     /**
+     * Clear a range of bits by setting it to 0
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * bs1.clear(); // Clear entire set
+     * bs1.clear(5); // Clear single bit
+     * bs1.clar(3,10); // Clear a bit range
+     *
+     * @param {number=} from The start index of the range to be cleared
+     * @param {number=} to The end index of the range to be cleared
+     * @returns {BitSet} this
+     */
+    'clear': function(from, to) {
+
+      var data = this['data'];
+
+      if (from === undefined) {
+
+        for (var i = data.length - 1; i >= 0; i--) {
+          data[i] = 0;
+        }
+        this['_'] = 0;
+
+      } else if (to === undefined) {
+
+        from |= 0;
+
+        scale(this, from);
+
+        data[from >>> WORD_LOG] &= ~(1 << from);
+
+      } else if (from <= to) {
+
+        scale(this, to);
+
+        for (var i = from; i <= to; i++) {
+          data[i >>> WORD_LOG] &= ~(1 << i);
+        }
+      }
+      return this;
+    },
+    /**
      * Clones the actual object
      *
      * Ex:
@@ -494,9 +536,17 @@
         }
 
         if (this['_'] === 0) {
-          return ret.replace(/^0+/, '');
+
+          ret = ret.replace(/^0+/, '');
+
+          if (ret === '')
+            ret = '0';
+          return ret;
+
         } else {
-          return ("1111" + ret).replace(/^1+/, '...1111');
+          // Pad the string with ones
+          ret = "1111" + ret;
+          return ret.replace(/^1+/, '...1111');
         }
 
       } else {
@@ -507,7 +557,7 @@
         var ret = [];
         var arr = [];
 
-        // Copy to a new array
+        // Copy every single bit to a new array
         for (var i = data.length; i--; ) {
 
           for (var j = WORD_LENGTH; j--; ) {
