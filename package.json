@@ -7,6 +7,7 @@
     "keywords": ["bit", "set", "twiddle", "bit array", "binary", "bit vector", "bitset", "bitmap", "bitstring", "bitwise"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "bitset",
+    "private": false,
     "readmeFilename": "README.md",
     "license": "MIT OR GPL-2.0",
     "repository": {
