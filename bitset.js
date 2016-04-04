@@ -196,7 +196,7 @@
       scale(this, ndx);
 
       if (value === undefined || value) {
-        this['data'][ndx >>> WORD_LOG] |= 1 << ndx;
+        this['data'][ndx >>> WORD_LOG] |= (1 << ndx);
       } else {
         this['data'][ndx >>> WORD_LOG] &= ~(1 << ndx);
       }
@@ -391,7 +391,7 @@
         t[k] &= ~p[k];
       }
       this['_'] &= ~p_;
-      
+
       return this;
     },
     /**
@@ -457,6 +457,74 @@
               }
               return ret;
             },
+    /**
+     * Overrides the toString method to get a binary representation of the BitSet
+     *
+     * @param {number=} base
+     * @returns string A binary string
+     */
+    'toString': function(base) {
+
+      var data = this['data'];
+
+      if (!base)
+        base = 2;
+
+      // If base is power of two
+      if ((base & (base - 1)) === 0 && base < 36) {
+
+        var ret = "";
+        var len = 2 + Math.log(4294967295/*Math.pow(2, WORD_LENGTH)-1*/) / Math.log(base) | 0;
+
+        for (var i = data.length - 1; i >= 0; i--) {
+
+          var cur = data[i];
+
+          // Make the number unsigned
+          if (cur < 0)
+            cur += 4294967296 /*Math.pow(2, WORD_LENGTH)*/;
+
+          var tmp = cur.toString(base);
+
+          if (ret !== "") {
+            // Fill small positive numbers with leading zeros. The +1 for array creation is added outside already
+            ret += new Array(len - tmp.length).join("0");
+          }
+          ret += tmp;
+        }
+
+        if (this['_'] === 0) {
+          return ret.replace(/^0+/, '');
+        } else {
+          return ("1111" + ret).replace(/^1+/, '...1111');
+        }
+
+      } else {
+
+        if ((2 > base || base > 36))
+          throw "Invalid base";
+
+        var ret = [];
+        var arr = [];
+
+        // Copy to a new array
+        for (var i = data.length; i--; ) {
+
+          for (var j = WORD_LENGTH; j--; ) {
+
+            arr.push(data[i] >>> j & 1);
+          }
+        }
+
+        do {
+          ret.unshift(divide(arr, base).toString(base));
+        } while (!arr.every(function(x) {
+          return x === 0;
+        }));
+
+        return ret.join("");
+      }
+    },
     /**
      * Check if the BitSet is empty, means all bits are unset
      *
