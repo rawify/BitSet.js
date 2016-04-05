@@ -96,6 +96,19 @@ describe('BitSet', function() {
     assert.equal(bs.msb(), 333);
   });
 
+  it('should slice negated', function() {
+
+    var bs = new BitSet(4);
+
+    bs.not();
+    
+    assert.equal(bs.toString(), '...1111011');
+
+    assert.equal(bs.slice(1).toString(), '...111101');
+    
+    assert.equal(bs.slice(1, 3).toString(), '101');
+  });
+
   it('should msbit should work negative numbers', function() {
     var flipped = new BitSet().not();
 

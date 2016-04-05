@@ -473,9 +473,22 @@
         return this['clone']();
       } else if (to === undefined) {
 
+        to = this['data'].length * WORD_LENGTH;
+
+        var im = Object.create(BitSet.prototype);
+
+        im['_'] = this['_'];
+        im['data'] = [0];
+
+        for (var i = from; i <= to; i++) {
+          im['set'](i - from, this['get'](i));
+        }
+        return im;
+
       } else if (from <= to && 0 <= from) {
 
         var im = Object.create(BitSet.prototype);
+        im['data'] = [0];
 
         for (var i = from; i <= to; i++) {
           im['set'](i - from, this['get'](i));
