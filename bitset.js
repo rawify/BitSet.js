@@ -138,6 +138,26 @@
           }
           break;
         }
+
+        if (Uint8Array && val instanceof Uint8Array) {
+
+          var bits = 8;
+
+          scale(P, val.length * bits);
+
+          for (var i = 0; i < val.length; i++) {
+
+            var n = val[i];
+
+            for (var j = 0; j < bits; j++) {
+
+              var k = i * bits + j;
+
+              P['data'][k >>> WORD_LOG] |= (n >> j & 1) << k;
+            }
+          }
+          break;
+        }
         throw SyntaxError('Invalid param');
     }
   }
@@ -435,6 +455,34 @@
         }
       }
       return this;
+    },
+    /**
+     * Gets an entire range as a new bitset object
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * bs1.slice(4, 8);
+     *
+     * @param {number=} from The start index of the range to be get
+     * @param {number=} to The end index of the range to be get
+     * @returns {BitSet} A new smaller bitset object, containing the extracted range
+     */
+    'slice': function(from, to) {
+
+      if (from === undefined) {
+        return this['clone']();
+      } else if (to === undefined) {
+
+      } else if (from <= to && 0 <= from) {
+
+        var im = Object.create(BitSet.prototype);
+
+        for (var i = from; i <= to; i++) {
+          im['set'](i - from, this['get'](i));
+        }
+        return im;
+      }
+      return null;
     },
     /**
      * Clones the actual object
