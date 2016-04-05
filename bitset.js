@@ -126,15 +126,22 @@
         break;
 
       default:
+        
+        P['data'] = [0];
+        var data = P['data'];
 
         if (val instanceof Array) {
 
           for (var i = val.length - 1; i >= 0; i--) {
-            var ndx = val[i] | 0;
+            
+            var ndx = val[i];
 
-            scale(P, ndx);
-
-            P['data'][ndx >>> WORD_LOG] |= 1 << ndx;
+            if (ndx === Infinity) {
+              P['_'] = -1;
+            } else {
+              scale(P, ndx);
+              data[ndx >>> WORD_LOG] |= 1 << ndx;
+            }
           }
           break;
         }
@@ -153,7 +160,7 @@
 
               var k = i * bits + j;
 
-              P['data'][k >>> WORD_LOG] |= (n >> j & 1) << k;
+              data[k >>> WORD_LOG] |= (n >> j & 1) << k;
             }
           }
           break;
@@ -579,9 +586,6 @@
     'toArray': Math['clz32'] ?
             function() {
 
-              if (this['_'] !== 0)
-                return Infinity;
-
               var ret = [];
               var data = this['data'];
 
@@ -595,12 +599,13 @@
                   ret.unshift((i * WORD_LENGTH) + t);
                 }
               }
+
+              if (this['_'] !== 0)
+                ret.push(Infinity);
+
               return ret;
             } :
             function() {
-
-              if (this['_'] !== 0)
-                return Infinity;
 
               var ret = [];
               var data = this['data'];
@@ -615,6 +620,10 @@
                   ret.push((i * WORD_LENGTH) + popCount(t - 1));
                 }
               }
+
+              if (this['_'] !== 0)
+                ret.push(Infinity);
+
               return ret;
             },
     /**

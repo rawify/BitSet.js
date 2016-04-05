@@ -107,7 +107,6 @@ describe('BitSet', function() {
     assert.equal(bs.toString(), "...111100000011111111111111000000011111111111111111111111111111");
   });
 
-
   it('should flip/clear 4', function() {
 
     var bs = new BitSet;
@@ -118,6 +117,16 @@ describe('BitSet', function() {
     assert.equal(bs.toString(), "111111111111111111111111111000000011111111111111111111111111111");
 
   });
+
+  it('should eat own dogfood', function() {
+
+    var bs = new BitSet(4);
+
+    bs.not();
+    console.log(bs, BitSet(bs.toArray()))
+    assert.equal(BitSet(bs.toArray()).toString(), bs.toString());
+  });
+
   it('should flip range check', function() {
 
     var bs = new BitSet;
