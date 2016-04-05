@@ -190,6 +190,34 @@ describe('BitSet', function() {
     assert.equal(bs.slice(1, 3).toString(), '101');
   });
 
+  it('should setRange 2', function() {
+
+    var bs = new BitSet;
+
+    bs = bs.setRange(0, 70);
+    bs = bs.setRange(30, 45, 0);
+
+    assert.equal(bs.toString(), "11111111111111111111111110000000000000000111111111111111111111111111111");
+  });
+
+  it('should setRange 3', function() {
+
+    var bs = new BitSet;
+
+    bs = bs.setRange(2, 12, "1111001111");
+
+    assert.equal(bs.toString(), "1111111111100");
+  });
+
+  it('should setRange 1', function() {
+
+    var bs = new BitSet;
+
+    bs = bs.setRange(3, 10);
+
+    assert.equal(bs.toString(), "11111111000");
+  });
+
   it('should msbit should work negative numbers', function() {
     var flipped = new BitSet().not();
 

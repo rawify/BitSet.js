@@ -535,6 +535,26 @@
       return null;
     },
     /**
+     * Set a range of bits
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     *
+     * bs1.setRange(10, 15, 1);
+     *
+     * @param {number} from The start index of the range to be set
+     * @param {number} to The end index of the range to be set
+     * @param {number} value Optional value that should be set on the index (0 or 1)
+     * @returns {BitSet} this
+     */
+    'setRange': function(from, to, value) {
+
+      for (var i = from; i <= to; i++) {
+        this['set'](i, value);
+      }
+      return this;
+    },
+    /**
      * Clones the actual object
      *
      * Ex:

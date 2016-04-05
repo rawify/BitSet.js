@@ -34,6 +34,13 @@ if (str === "111111111111111111111111111000000011111111111111111111111111111") {
 }
 ```
 
+Range Set
+---
+```javascript
+var bs = new BitSet;
+bs.setRange(10, 18, 1); // Set a 1 between 10 and 18, inclusive
+```
+
 User permissions
 ---
 If you want to store user permissions in your database and use BitSet for the bit twiddling, you can start with the following Linux-style snippet:
@@ -90,13 +97,17 @@ Functions
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
 
 
-BitSet set(int ndx[, int value=0)
+BitSet set(ndx[, value=0)
 ---
 Sets value 0 or 1 to index `ndx` of the betset
 
 int get(int ndx)
 ---
 Gets the value at index ndx
+
+BitSet setRange(from, to[, value=1])
+---
+Helper function for set, to set an entire range to a given value
 
 BitSet clear([from[, to])
 ---
