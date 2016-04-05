@@ -64,7 +64,7 @@
    * Parses the parameters and set variable P
    *
    * @param {Object} P
-   * @param {string|BitSet|number=} val
+   * @param {string|BitSet|Array|Uint8Array|number=} val
    */
   function parse(P, val) {
 
@@ -772,7 +772,7 @@
      *
      * bs1.equals(bs2) ? 'yes' : 'no'
      *
-     * @param {BitSet} p A bitset object
+     * @param {BitSet} val A bitset object
      * @returns {boolean} Whether the two BitSets are similar
      */
     'equals': function(val) {
