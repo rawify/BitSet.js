@@ -18,6 +18,30 @@ describe('BitSet', function() {
     assert.equal(bs.toString(2), '11111111111111111111111111111111');
   });
 
+  it('should set an individual bit', function() {
+    var bs = new BitSet();
+    bs.set(31);
+    assert.equal(bs.get(31), 1);
+  });
+
+  it('should find first set', function() {
+    var bs = new BitSet();
+    bs.set(31);
+    assert.equal(bs.msb(), 31);
+  });
+
+  it('should not be able to find first set in an empty bitset', function() {
+    var bs = new BitSet();
+    assert.equal(bs.msb(), Infinity);
+  });
+
+  it('should unset a bit', function() {
+    var bs = new BitSet();
+    bs.set(31);
+    bs.unset(31);
+    assert.equal(bs.get(31), 0);
+  });
+
   it('should Hex in - Hex out', function() {
 
     var bs = new BitSet("0xD00000005");
@@ -101,11 +125,11 @@ describe('BitSet', function() {
     var bs = new BitSet(4);
 
     bs.not();
-    
+
     assert.equal(bs.toString(), '...1111011');
 
     assert.equal(bs.slice(1).toString(), '...111101');
-    
+
     assert.equal(bs.slice(1, 3).toString(), '101');
   });
 
