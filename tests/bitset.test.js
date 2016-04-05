@@ -69,6 +69,63 @@ describe('BitSet', function() {
     assert.equal(bs.slice(130, 160).toString(8), '0');
   });
 
+  it('should check empty', function() {
+
+    var bs = new BitSet();
+
+    assert.equal(bs.isEmpty(), true);
+
+    bs = bs.set(0);
+
+    assert.equal(bs.isEmpty(), false);
+
+  });
+
+  it('should flip/clear 2', function() {
+
+    var bs = new BitSet;
+
+    bs = bs.set(60);
+
+    bs = bs.flip();
+
+    bs = bs.flip(29, 35);
+    assert.equal(bs.toString(), "...11110111111111111111111111111000000011111111111111111111111111111");
+  });
+
+  it('should flip/clear 3', function() {
+
+    var bs = new BitSet;
+
+    bs = bs.set(60, 0); // Set size
+
+    bs = bs.flip(29, 35);
+
+    bs = bs.flip();
+
+    bs = bs.clear(50, 55);
+    assert.equal(bs.toString(), "...111100000011111111111111000000011111111111111111111111111111");
+  });
+
+
+  it('should flip/clear 4', function() {
+
+    var bs = new BitSet;
+    bs
+            .flip(0, 62)
+            .flip(29, 35);
+
+    assert.equal(bs.toString(), "111111111111111111111111111000000011111111111111111111111111111");
+
+  });
+  it('should flip range check', function() {
+
+    var bs = new BitSet;
+
+    assert.equal(bs.flip(-1, 0).toString(), '0');
+    assert.equal(bs.flip(1, 0).toString(), '0');
+  });
+
   it('should And', function() {
 
     var bs = new BitSet("0xff05");

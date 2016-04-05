@@ -384,6 +384,43 @@
       return this;
     },
     /**
+     * Flip/Invert a range of bits by setting
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * bs1.flip(); // Flip entire set
+     * bs1.flip(5); // Flip single bit
+     * bs1.flip(3,10); // Flip a bit range
+     *
+     * @param {number=} from The start index of the range to be flipped
+     * @param {number=} to The end index of the range to be flipped
+     * @returns {BitSet} this
+     */
+    'flip': function(from, to) {
+
+      if (from === undefined) {
+
+        return this['not']();
+
+      } else if (to === undefined) {
+
+        from |= 0;
+
+        scale(this, from);
+
+        this['data'][from >>> WORD_LOG] ^= (1 << from);
+
+      } else if (from <= to && 0 <= from) {
+
+        scale(this, to);
+
+        for (var i = from; i <= to; i++) {
+          this['data'][i >>> WORD_LOG] ^= (1 << i);
+        }
+      }
+      return this;
+    },
+    /**
      * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
      *
      * Ex:
@@ -778,7 +815,7 @@
       var data = this['data'];
 
       for (var i = 0; i < data.length; i++) {
-        
+
         var v = data[i];
         var c = 0;
 

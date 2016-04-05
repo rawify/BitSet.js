@@ -19,6 +19,21 @@ bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
 
+Flipping bits
+---
+```javascript
+var bs = new BitSet;
+bs
+  .flip(0, 62)
+  .flip(29, 35);
+
+var str = bs.toString();
+
+if (str === "111111111111111111111111111000000011111111111111111111111111111") {
+   console.log("YES!");
+}
+```
+
 User permissions
 ---
 If you want to store user permissions in your database and use BitSet for the bit twiddling, you can start with the following Linux-style snippet:
@@ -85,15 +100,27 @@ Gets the value at index ndx
 
 BitSet clear([from[, to])
 ---
+Sets a portion of a given bitset to zero
+
 - If no param is given, the whole bitset gets cleared
 - If one param is given, the bit at this index gets cleared
 - If two params are given, the range is cleared
 
 BitSet slice([from[, to])
 ---
+Extracts a portion of a given bitset as a new bitset
+
 - If no param is given, the bitset is getting cloned
-- If one param is given, the index is used as offset. A new bitset is returned to the end
+- If one param is given, the index is used as offset
 - If two params are given, the range is returned as new BitSet
+
+BitSet flip([from[, to])
+---
+Toggles a portion of a given bitset
+
+- If no param is given, the bitset is inverted
+- If one param is given, the bit at the index is toggled
+- If two params are given, the bits in the given range are toggled
 
 BitSet not()
 ---
