@@ -4,9 +4,7 @@
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-BitSet.js is a [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementation in JavaScript.
-
-With this library, you can work on large bit vectors without worring about system constraints, given by integer size.
+BitSet.js is a infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementation in JavaScript. That means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the fastest implementation to date.
 
 *NOTE:* As of version v4.0.0, BitSet.js is mutable, which means that the object gets changed by method invocations. In order to work on explicit copies, use `clone()`.
 
@@ -17,7 +15,7 @@ Basic usage
 ---
 ```javascript
 var bs = new BitSet;
-bs = bs.set(128, 1); // Set bit at position 128
+bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
 
@@ -30,37 +28,13 @@ var P_WRITE = 1;
 var P_EXEC  = 0;
 
 var user = new BitSet;
-user = user.set(P_READ); // Give read perms
-user = user.set(P_WRITE); // Give write perms
+user.set(P_READ); // Give read perms
+user.set(P_WRITE); // Give write perms
 
 var group = new BitSet(P_READ);
 var world = new BitSet(P_EXEC);
 
-console.log("0" + user.toString(8) + group.toString(8) + world.toString());
-```
-
-
-Range Set
----
-```javascript
-var bs = new BitSet; // Default is 31 bit
-bs.setRange(10, 18, 1); // Set a 1 between 10 and 18
-```
-
-
-Flipping bits
----
-```javascript
-var bs = new BitSet;
-bs = bs
-  .flip(0, 62)
-  .flip(29, 35);
-
-var str = bs.toString();
-
-if (str === "11111111111111111111111111000000011111111111111111111111111111") {
-   console.log("YES!");
-}
+console.log("0" + user.toString(8) + group.toString(8) + world.toString(8));
 ```
 
 Installation
@@ -76,114 +50,110 @@ bower install bitset.js
 
 Using BitSet.js with the browser
 ===
-    <script src="bitset.js"></script>
-    <script>
-        console.log(BitSet("111"));
-    </script>
-
+```html
+<script src="bitset.js"></script>
+<script>
+    console.log(BitSet("111"));
+</script>
+```
 
 Using BitSet.js with require.js
 ===
-    <script src="require.js"></script>
-    <script>
-    requirejs(['bitset.js'],
-    function(BitSet) {
-        console.log(BitSet("1111"));
-    });
-    </script>
+```html
+<script src="require.js"></script>
+<script>
+requirejs(['bitset.js'],
+function(BitSet) {
+    console.log(BitSet("1111"));
+});
+</script>
+```
 
-
-Available methods
+Functions
 ===
 
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
 
-Bitwise functions
+
+BitSet set(int ndx[, int value=0)
 ---
-**Bitwise not**
-```
-BitSet not(Mixed x)
-```
-**Bitwise and**
-```
+Sets value 0 or 1 to index `ndx` of the betset
+
+int get(int ndx)
+---
+Gets the value at index ndx
+
+BitSet clear([from[, to])
+---
+- If no param is given, the whole bitset gets cleared
+- If one param is given, the bit at this index gets cleared
+- If two params are given, the range is cleared
+
+BitSet slice([from[, to])
+---
+- If no param is given, the bitset is getting cloned
+- If one param is given, the index is used as offset. A new bitset is returned to the end
+- If two params are given, the range is returned as new BitSet
+
+BitSet not()
+---
+Calculates the bitwise not
+
 BitSet and(Mixed x)
-```
-**Bitwise or**
-```
+---
+Calculates the bitwise and between two bitsets
+
 BitSet or(Mixed x)
-```
-**Bitwise nand**
-```
-BitSet nand(Mixed x)
-```
-**Bitwise nor**
-```
-BitSet nor(Mixed x)
-```
-**Bitwise xor**
-```
+---
+Calculates the bitwise or between two bitsets
+
 BitSet xor(Mixed x)
-```
-**Set a bit at position index, default 1**
-```
-BitSet set(int index, int value=1)
-```
-**Get a bit at position index**
-```
-BitSet get(int index)
-```
-**Set a range of bits, either by a binary string or by a single bit value**
-```
-BitSet setRange(int start, int end, String binstr)
-BitSet setRange(int start, int end, int value)
-```
-**Retrieve a range of bits, indicated by start and end index**
-```
-BitSet getRange(int start, int end)
-```
-**Get the number of bits set**
-```
-int cardinality()
-```
-**Get the most significant bit set, same as log base two**
-```
-int msb()
-```
-**Clear a range of bits, either all, a certain position or indicated with start and end**
-```
-BitSet clear()
-BitSet clear(int pos)
-BitSet clear(int start, int end)
-```
-
-**Invert/Flip either all bits, a single bit position or a range of bits**
-```
-BitSet flip()
-BitSet flip(int pos)
-BitSet flip(int start, int end)
-```
-
-Comparision functions
 ---
-**Compare (=same size and all bits equal) two BitSet objects**
-```
-boolean equals(BitSet x)
-```
-**Check if all bits of a BitSet are set to 0**
-```
-boolean isEmpty()
-```
+Calculates the bitwise xor between two bitsets
 
-Misc functions
+BitSet andNot(Mixed x)
 ---
-**Overrides the toString function for a pretty representation**
-```
-String toString(Number radix=2)
-```
-**Create a copy of the actual BitSet object**
-```
+Calculates the bitwise andNot between two bitsets (this is not the nand operation!)
+
 BitSet clone()
-```
+---
+Clones the actual object
+
+Array toArray()
+---
+Returns an array with all indexes set in the bitset
+
+String toString([base=2])
+---
+Returns a string representation with respect to the base
+
+int cardinality()
+---
+Calculates the number of bits set
+
+int msb()
+---
+Calculates the most significant bit (the left most)
+
+int ntz()
+---
+Calculates the number of trailing zeros (zeros on the right)
+
+bool isEmpty()
+---
+Checks if the bitset has all bits set to zero
+
+bool equals()
+---
+Checks if two bitsets are the same
+
+BitSet.fromBinaryString(str)
+---
+Alternative constructor to pass with a binary string
+
+BitSet.fromHexString(str)
+---
+Alternative constructor to pass a hex string
 
 Coding Style
 ===
