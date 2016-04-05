@@ -172,6 +172,29 @@ describe('BitSet', function() {
     assert.equal(bs.msb(), 330); // Thus, msb is on 330
   });
 
+  it('should lsbit', function() {
+
+    assert.equal(
+            new BitSet('10000000000110001000000000').lsb(),
+            9
+            );
+
+    assert.equal(
+            new BitSet('00000000000000000000000000').lsb(),
+            0
+            );
+
+    assert.equal(
+            new BitSet('10000000000000000000000000').lsb(),
+            25
+            );
+
+    assert.equal(
+            new BitSet('10000000100000000000000000000000000000000000').lsb(),
+            35
+            );
+  });
+
   it('should string and', function() {
 
     var bsa = new BitSet();

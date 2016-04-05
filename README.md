@@ -139,6 +139,10 @@ int ntz()
 ---
 Calculates the number of trailing zeros (zeros on the right)
 
+int lsb()
+---
+Calculates the least significant bit (the right most)
+
 bool isEmpty()
 ---
 Checks if the bitset has all bits set to zero

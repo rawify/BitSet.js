@@ -764,6 +764,37 @@
       return Infinity;
     },
     /**
+     * Calculates the Least Significant Bit
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     *
+     * var lsb = bs1.lsb();
+     *
+     * @returns {number} The index of the lowest bit set
+     */
+    'lsb': function() {
+
+      var data = this['data'];
+
+      for (var i = 0; i < data.length; i++) {
+        
+        var v = data[i];
+        var c = 0;
+
+        if (v) {
+
+          var bit = (v & -v);
+
+          for (; (bit >>>= 1); c++) {
+
+          }
+          return WORD_LENGTH * i + c;
+        }
+      }
+      return this['_'] & 1;
+    },
+    /**
      * Compares two BitSet objects
      *
      * Ex:
