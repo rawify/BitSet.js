@@ -38,7 +38,7 @@ describe('BitSet', function() {
   it('should unset a bit', function() {
     var bs = new BitSet();
     bs.set(31);
-    bs.unset(31);
+    bs.clear(31);
     assert.equal(bs.get(31), 0);
   });
 
