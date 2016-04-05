@@ -22,6 +22,9 @@
     },
     "devDependencies": {
         "mocha": "*",
-        "should": "*"
+        "should": "*",
+        "google-closure-compiler": "20160208.1.0",
+        "google-closure-library": "20160208.0.0",
+        "gulp": "^3.9.0"
     }
 }

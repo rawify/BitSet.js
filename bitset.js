@@ -7,7 +7,7 @@
  **/
 (function(root) {
 
-  "use strict";
+  'use strict';
 
   /**
    * The number of bits of a word
@@ -576,7 +576,7 @@
       // If base is power of two
       if ((base & (base - 1)) === 0 && base < 36) {
 
-        var ret = "";
+        var ret = '';
         var len = 2 + Math.log(4294967295/*Math.pow(2, WORD_LENGTH)-1*/) / Math.log(base) | 0;
 
         for (var i = data.length - 1; i >= 0; i--) {
@@ -589,9 +589,9 @@
 
           var tmp = cur.toString(base);
 
-          if (ret !== "") {
+          if (ret !== '') {
             // Fill small positive numbers with leading zeros. The +1 for array creation is added outside already
-            ret += new Array(len - tmp.length).join("0");
+            ret += new Array(len - tmp.length).join('0');
           }
           ret += tmp;
         }
@@ -606,14 +606,14 @@
 
         } else {
           // Pad the string with ones
-          ret = "1111" + ret;
+          ret = '1111' + ret;
           return ret.replace(/^1+/, '...1111');
         }
 
       } else {
 
         if ((2 > base || base > 36))
-          throw "Invalid base";
+          throw 'Invalid base';
 
         var ret = [];
         var arr = [];
@@ -633,7 +633,7 @@
           return x === 0;
         }));
 
-        return ret.join("");
+        return ret.join('');
       }
     },
     /**
