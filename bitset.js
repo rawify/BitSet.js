@@ -816,8 +816,6 @@
       var t_ = this['_'];
       var p_ = P['_'];
 
-      var i = 0;
-
       var tl = t.length - 1;
       var pl = p.length - 1;
 
