@@ -1,4 +1,4 @@
-# BitSet.js 
+# BitSet.js
 
 [![NPM Package](https://img.shields.io/npm/v/bitset.js.svg?style=flat)](https://npmjs.org/package/bitset.js "View this project on npm")
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
@@ -222,6 +222,15 @@ Alternative constructor to pass a hex string
 Coding Style
 ===
 As every library I publish, bitset.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
+
+Build the library
+===
+Gulp is optional for minifying with Google Closure Compiler. After cloning the Git repository, do:
+
+```
+npm install
+gulp
+```
 
 Run a test
 ===
