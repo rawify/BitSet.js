@@ -121,7 +121,7 @@ The data type Mixed can be either a BitSet object, a String or an integer repres
 
 BitSet set(ndx[, value=0)
 ---
-Sets value 0 or 1 to index `ndx` of the betset
+Sets value 0 or 1 to index `ndx` of the bitset
 
 int get(int ndx)
 ---
