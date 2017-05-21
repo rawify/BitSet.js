@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v4.0.0 14/08/2015
+ * @license BitSet.js v4.0.1 14/08/2015
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
@@ -83,7 +83,7 @@
     switch (typeof val) {
 
       case 'number':
-        P['data'] = [val | 0];
+        P['data'] = [val | 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         P['_'] = 0;
         break;
 
@@ -514,7 +514,7 @@
      *
      * @param {number=} from The start index of the range to be get
      * @param {number=} to The end index of the range to be get
-     * @returns {BitSet} A new smaller bitset object, containing the extracted range
+     * @returns {BitSet|Object} A new smaller bitset object, containing the extracted range
      */
     'slice': function(from, to) {
 
@@ -573,7 +573,7 @@
      * bs1 = new BitSet(10);
      * bs2 = bs1.clone();
      *
-     * @returns {BitSet} A new BitSet object, containing a copy of the actual object
+     * @returns {BitSet|Object} A new BitSet object, containing a copy of the actual object
      */
     'clone': function() {
 
