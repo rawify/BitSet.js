@@ -270,11 +270,16 @@
       var t = this['data'];
       var p = P['data'];
 
+      var p_ = P['_'];
+
       var pl = p.length - 1;
       var tl = t.length - 1;
 
-      for (var i = tl; i > pl; i--) {
-        t[i] = 0;
+      if (p_ == 0) {
+        // clear any bits set:
+        for (var i = tl; i > pl; i--) {
+          t[i] = 0;
+        }
       }
 
       for (; i >= 0; i--) {

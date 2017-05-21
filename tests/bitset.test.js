@@ -387,6 +387,21 @@ describe('BitSet', function() {
     assert.equal(bs.get(4) + bs.get(0), 2);
   });
 
+  it('should work with flipped bitset: and', function() {
+
+    var a = new BitSet(0);
+    var b = new BitSet(0);
+    a = a.set(1);
+    b = b.set(50);
+
+    var output = b.and(a.not());
+
+    // check bits are correctly set beyond length of a
+    assert.equal(1, output.get(50));
+    // check bits are correctly unset beyond length of a
+    assert.equal(0, output.get(51));
+  });
+
   it('should work with different length scales: and', function() {
 
     var a = new BitSet();
