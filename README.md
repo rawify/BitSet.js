@@ -63,7 +63,7 @@ Installation
 ===
 
 ```
-npm install --save bitset.js
+npm install bitset.js
 ```
 or
 ```
