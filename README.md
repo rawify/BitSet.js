@@ -1,6 +1,7 @@
 # BitSet.js
 
-[![NPM Package](https://img.shields.io/npm/v/bitset.js.svg?style=flat)](https://npmjs.org/package/bitset.js "View this project on npm")
+[![NPM Package](https://nodei.co/npm-dl/bitset.js.png?months=6&height=1)](https://npmjs.org/package/bitset.js)
+
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
