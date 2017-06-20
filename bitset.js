@@ -197,8 +197,8 @@
   }
 
   var P = {
-    'data': [],
-    '_': 0
+    'data': [], // Holds the actual bits in form of a 32bit integer array. 
+    '_': 0 // Holds the MSB flag information to make indefinitely large bitsets inversion-proof
   };
 
   BitSet.prototype = {
