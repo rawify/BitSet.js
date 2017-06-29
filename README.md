@@ -198,7 +198,7 @@ Calculates the most significant bit (the left most)
 
 int ntz()
 ---
-Calculates the number of trailing zeros (zeros on the right)
+Calculates the number of trailing zeros (zeros on the right). If all digits are zero, `Infinity` is returned, since BitSet.js is an arbitrary large bit vector implementation.
 
 int lsb()
 ---
