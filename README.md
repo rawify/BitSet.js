@@ -220,6 +220,10 @@ BitSet.fromHexString(str)
 ---
 Alternative constructor to pass a hex string
 
+BitSet.Random(n=32)
+---
+Create a random BitSet with a maximum length of n bits
+
 Coding Style
 ===
 As every library I publish, bitset.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.

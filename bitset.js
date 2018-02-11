@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v4.0.0 14/08/2015
+ * @license BitSet.js v4.0.1 14/08/2015
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
@@ -126,14 +126,14 @@
         break;
 
       default:
-        
+
         P['data'] = [0];
         var data = P['data'];
 
         if (val instanceof Array) {
 
           for (var i = val.length - 1; i >= 0; i--) {
-            
+
             var ndx = val[i];
 
             if (ndx === Infinity) {
@@ -275,7 +275,7 @@
       var pl = p.length - 1;
       var tl = t.length - 1;
 
-      if (p_ == 0) {
+      if (p_ === 0) {
         // clear any bits set:
         for (var i = tl; i > pl; i--) {
           t[i] = 0;
@@ -514,7 +514,7 @@
      *
      * @param {number=} from The start index of the range to be get
      * @param {number=} to The end index of the range to be get
-     * @returns {BitSet} A new smaller bitset object, containing the extracted range
+     * @returns {BitSet|Object} A new smaller bitset object, containing the extracted range
      */
     'slice': function(from, to) {
 
@@ -573,7 +573,7 @@
      * bs1 = new BitSet(10);
      * bs2 = bs1.clone();
      *
-     * @returns {BitSet} A new BitSet object, containing a copy of the actual object
+     * @returns {BitSet|Object} A new BitSet object, containing a copy of the actual object
      */
     'clone': function() {
 
@@ -914,14 +914,43 @@
     }
   };
 
-  BitSet.fromBinaryString = function(str) {
+  BitSet['fromBinaryString'] = function(str) {
 
     return new BitSet('0b' + str);
   };
 
-  BitSet.fromHexString = function(str) {
+  BitSet['fromHexString'] = function(str) {
 
     return new BitSet('0x' + str);
+  };
+
+  BitSet['Random'] = function(n) {
+
+    if (n === undefined || n < 0) {
+      n = WORD_LENGTH;
+    }
+
+    var m = n % WORD_LENGTH;
+
+    // Create an array, large enough to hold the random bits
+    var t = new Array(Math.ceil(n / WORD_LENGTH));
+
+    // Create an bitset instance
+    var s = Object.create(BitSet.prototype);
+
+    // Fill the vector with random data, uniformally distributed
+    for (var i = 0; i < t.length; i++) {
+      t[i] = Math.random() * 4294967296 | 0;
+    }
+
+    // Mask out unwanted bits
+    if (m > 0) {
+      t[i - 1] &= (1 << m) - 1;
+    }
+
+    s['data'] = t;
+    s['_'] = 0;
+    return s;
   };
 
   if (typeof define === 'function' && define['amd']) {
