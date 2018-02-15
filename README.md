@@ -1,6 +1,6 @@
 # BitSet.js
 
-[![NPM Package](https://nodei.co/npm-dl/bitset.js.png?months=6&height=1)](https://npmjs.org/package/bitset.js)
+[![NPM Package](https://nodei.co/npm-dl/bitset.png?months=6&height=1)](https://npmjs.org/package/bitset)
 
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
@@ -64,7 +64,7 @@ Installation
 ===
 
 ```
-npm install bitset.js
+npm install bitset
 ```
 or
 ```
@@ -226,7 +226,7 @@ Create a random BitSet with a maximum length of n bits
 
 Coding Style
 ===
-As every library I publish, bitset.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
+As every library I publish, BitSet.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
 
 Build the library
 ===
@@ -247,5 +247,5 @@ npm test
 
 Copyright and licensing
 ===
-Copyright (c) 2014-2017, [Robert Eisele](https://www.xarg.org/)
+Copyright (c) 2014-2018, [Robert Eisele](https://www.xarg.org/)
 Dual licensed under the MIT or GPL Version 2 licenses.
