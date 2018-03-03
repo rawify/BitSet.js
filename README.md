@@ -7,8 +7,6 @@
 
 BitSet.js is a infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) implementation in JavaScript. That means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the fastest implementation to date.
 
-*NOTE:* As of version v4.0.0, BitSet.js is mutable, which means that the object gets changed by method invocations. In order to work on explicit copies, use `clone()`.
-
 Examples
 ===
 
@@ -101,16 +99,16 @@ Strings
 - Binary strings with prefix "0b100101"
 - Hexadecimal strings with prefix "0xaffe"
 
-Arrays
+**Arrays**
 - The values of the array are the indizes to be set to 1
 
-Uint8Array
+**Uint8Array**
 - A binary representation in 8 bit form
 
-Number
+**Number**
 - A binary value
 
-BitSet
+**BitSet**
 - A BitSet object, which get copied over
 
 
@@ -122,7 +120,7 @@ The data type Mixed can be either a BitSet object, a String or an integer repres
 
 BitSet set(ndx[, value=0)
 ---
-Sets value 0 or 1 to index `ndx` of the bitset
+Mutable; Sets value 0 or 1 to index `ndx` of the bitset
 
 int get(int ndx)
 ---
@@ -130,11 +128,11 @@ Gets the value at index ndx
 
 BitSet setRange(from, to[, value=1])
 ---
-Helper function for set, to set an entire range to a given value
+Mutable; Helper function for set, to set an entire range to a given value
 
 BitSet clear([from[, to])
 ---
-Sets a portion of a given bitset to zero
+Mutable; Sets a portion of a given bitset to zero
 
 - If no param is given, the whole bitset gets cleared
 - If one param is given, the bit at this index gets cleared
@@ -142,7 +140,7 @@ Sets a portion of a given bitset to zero
 
 BitSet slice([from[, to])
 ---
-Extracts a portion of a given bitset as a new bitset
+Immutable; Extracts a portion of a given bitset as a new bitset
 
 - If no param is given, the bitset is getting cloned
 - If one param is given, the index is used as offset
@@ -150,7 +148,7 @@ Extracts a portion of a given bitset as a new bitset
 
 BitSet flip([from[, to])
 ---
-Toggles a portion of a given bitset
+Mutable; Toggles a portion of a given bitset
 
 - If no param is given, the bitset is inverted
 - If one param is given, the bit at the index is toggled
@@ -158,27 +156,27 @@ Toggles a portion of a given bitset
 
 BitSet not()
 ---
-Calculates the bitwise not
+Immutable; Calculates the bitwise not
 
 BitSet and(Mixed x)
 ---
-Calculates the bitwise and between two bitsets
+Immutable; Calculates the bitwise and between two bitsets
 
 BitSet or(Mixed x)
 ---
-Calculates the bitwise or between two bitsets
+Immutable; Calculates the bitwise or between two bitsets
 
 BitSet xor(Mixed x)
 ---
-Calculates the bitwise xor between two bitsets
+Immutable; Calculates the bitwise xor between two bitsets
 
 BitSet andNot(Mixed x)
 ---
-Calculates the bitwise andNot between two bitsets (this is not the nand operation!)
+Immutable; Calculates the bitwise andNot between two bitsets (this is not the nand operation!)
 
 BitSet clone()
 ---
-Clones the actual object
+Immutable; Clones the actual object
 
 Array toArray()
 ---

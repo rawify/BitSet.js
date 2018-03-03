@@ -48,7 +48,7 @@
   function divide(arr, B) {
 
     let r = 0;
-    
+
     for (let i = 0; i < arr.length; i++) {
       r *= 2;
       let d = (arr[i] + r) / B | 0;
@@ -265,32 +265,33 @@
 
       parse(P, value);
 
-      const t = this['data'];
+      const t = this['clone']();
+      const d = t['data'];
       const p = P['data'];
 
       const p_ = P['_'];
 
       const pl = p.length - 1;
-      const tl = t.length - 1;
-      
+      const tl = d.length - 1;
+
       let i = tl;
 
       if (p_ === 0) {
         // clear any bits set:
         for (; i > pl; i--) {
-          t[i] = 0;
+          d[i] = 0;
         }
 
         for (; i >= 0; i--) {
-          t[i] &= p[i];
+          d[i] &= p[i];
         }
       } else {
         // ???
       }
 
-      this['_'] &= p_;
+      t['_'] &= p_;
 
-      return this;
+      return t;
     },
     /**
      * Creates the bitwise OR of two sets. The result is stored in-place.
@@ -308,26 +309,27 @@
 
       parse(P, val);
 
-      const t = this['data'];
+      const t = this['clone']();
+      const d = t['data'];
       const p = P['data'];
 
       const pl = p.length - 1;
-      const tl = t.length - 1;
+      const tl = d.length - 1;
 
       const minLength = Math.min(tl, pl);
 
       // Append backwards, extend array only once
       for (var i = pl; i > minLength; i--) {
-        t[i] = p[i];
+        d[i] = p[i];
       }
 
       for (; i >= 0; i--) {
-        t[i] |= p[i];
+        d[i] |= p[i];
       }
 
-      this['_'] |= P['_'];
+      t['_'] |= P['_'];
 
-      return this;
+      return t;
     },
     /**
      * Creates the bitwise NOT of a set. The result is stored in-place.
@@ -341,14 +343,15 @@
      */
     'not': function() { // invert()
 
-      const d = this['data'];
+      const t = this['clone']();
+      const d = t['data'];
       for (let i = 0; i < d.length; i++) {
         d[i] = ~d[i];
       }
 
-      this['_'] = ~this['_'];
+      t['_'] = ~t['_'];
 
-      return this;
+      return t;
     },
     /**
      * Creates the bitwise XOR of two sets. The result is stored in-place.
@@ -366,36 +369,37 @@
 
       parse(P, val);
 
-      const t = this['data'];
+      const t = this['clone']();
+      const d = t['data'];
       const p = P['data'];
 
-      const t_ = this['_'];
+      const t_ = t['_'];
       const p_ = P['_'];
 
       let i = 0;
 
-      const tl = t.length - 1;
+      const tl = d.length - 1;
       const pl = p.length - 1;
 
       // Cut if tl > pl
       for (i = tl; i > pl; i--) {
-        t[i] ^= p_;
+        d[i] ^= p_;
       }
 
       // Cut if pl > tl
       for (i = pl; i > tl; i--) {
-        t[i] = t_ ^ p[i];
+        d[i] = t_ ^ p[i];
       }
 
       // XOR the rest
       for (; i >= 0; i--) {
-        t[i] ^= p[i];
+        d[i] ^= p[i];
       }
 
       // XOR infinity
-      this['_'] ^= p_;
+      t['_'] ^= p_;
 
-      return this;
+      return t;
     },
     /**
      * Flip/Invert a range of bits by setting
@@ -414,7 +418,12 @@
 
       if (from === undefined) {
 
-        return this['not']();
+        const d = this['data'];
+        for (let i = 0; i < d.length; i++) {
+          d[i] = ~d[i];
+        }
+
+        this['_'] = ~this['_'];
 
       } else if (to === undefined) {
 
@@ -424,7 +433,7 @@
 
         this['data'][from >>> WORD_LOG] ^= (1 << from);
 
-      } else if (from <= to && 0 <= from) {
+      } else if (0 <= from && from <= to) {
 
         scale(this, to);
 
@@ -450,20 +459,21 @@
 
       parse(P, val);
 
-      const t = this['data'];
+      const t = this['clone']();
+      const d = t['data'];
       const p = P['data'];
 
       const t_ = this['_'];
       const p_ = P['_'];
 
-      const l = Math.min(t.length, p.length);
+      const l = Math.min(d.length, p.length);
 
       for (let k = 0; k < l; k++) {
-        t[k] &= ~p[k];
+        d[k] &= ~p[k];
       }
-      this['_'] &= ~p_;
+      t['_'] &= ~p_;
 
-      return this;
+      return t;
     },
     /**
      * Clear a range of bits by setting it to 0
