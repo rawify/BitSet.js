@@ -123,7 +123,6 @@ describe('BitSet', function() {
     var bs = new BitSet(4);
 
     bs.not();
-    console.log(bs, BitSet(bs.toArray()))
     assert.equal(BitSet(bs.toArray()).toString(), bs.toString());
   });
 
@@ -190,7 +189,7 @@ describe('BitSet', function() {
 
     var bs = new BitSet(4);
 
-    bs.not();
+    bs = bs.not();
 
     assert.equal(bs.toString(), '...1111011');
 
@@ -297,7 +296,7 @@ describe('BitSet', function() {
     var bsb = new BitSet();
     bsb.set(32);
 
-    bsa.and(bsb);
+    bsa = bsa.and(bsb);
 
     bsa.cardinality().should.equal(0);
     bsb.cardinality().should.equal(1);
@@ -326,7 +325,7 @@ describe('BitSet', function() {
     bsa.set(0);
     bsb.set(32);
 
-    bsa.or(bsb);
+    bsa = bsa.or(bsb);
 
     bsa.cardinality().should.equal(2);
     bsb.cardinality().should.equal(1);
@@ -461,6 +460,232 @@ describe('BitSet', function() {
     assert.equal(a.toString(), '11111111');
   });
 
+  it('should and fuzz 00', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = 0;
+
+    assert.equal(a.and(b).toString(), '10000000111')
+    assert.equal(b.and(a).toString(), '10000000111')
+  });
+
+  it('should and fuzz 01', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = -1;
+
+    assert.equal(a.and(b).toString(), '10000000111')
+    assert.equal(b.and(a).toString(), '10000000111')
+  });
+
+  it('should and fuzz 10', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = 0;
+
+    assert.equal(a.and(b).toString(), '10100100000000000000000000010000000111')
+    assert.equal(b.and(a).toString(), '10100100000000000000000000010000000111')
+  });
+
+  it('should and fuzz 11', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = -1;
+
+    assert.equal(a.and(b).toString(), '...11110100100000000000000000000010000000111')
+    assert.equal(b.and(a).toString(), '...11110100100000000000000000000010000000111')
+  });
+
+  it('should or fuzz 00', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = 0;
+
+    assert.equal(a.or(b).toString(), '10100100010010101000110101011111111111')
+    assert.equal(b.or(a).toString(), '10100100010010101000110101011111111111')
+  });
+
+  it('should or fuzz 01', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = -1;
+
+    assert.equal(a.or(b).toString(), '...11110100100010010101000110101011111111111')
+    assert.equal(b.or(a).toString(), '...11110100100010010101000110101011111111111')
+  });
+
+  it('should or fuzz 10', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = 0;
+
+    assert.equal(a.or(b).toString(), '...11110100100010010101000110101011111111111')
+    assert.equal(b.or(a).toString(), '...11110100100010010101000110101011111111111')
+  });
+
+  it('should or fuzz 11', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = -1;
+
+    assert.equal(a.or(b).toString(), '...11110100100010010101000110101011111111111')
+    assert.equal(b.or(a).toString(), '...11110100100010010101000110101011111111111')
+  });
+
+  it('should xor fuzz 00', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = 0;
+
+    assert.equal(a.xor(b).toString(), '10100100010010101000110101001111111000')
+    assert.equal(b.xor(a).toString(), '10100100010010101000110101001111111000')
+  });
+
+  it('should xor fuzz 01', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = -1;
+
+    assert.equal(a.xor(b).toString(), '...11110100100010010101000110101001111111000')
+    assert.equal(b.xor(a).toString(), '...11110100100010010101000110101001111111000')
+  });
+
+  it('should xor fuzz 10', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = 0;
+
+    assert.equal(a.xor(b).toString(), '...111101011000010010101000110101001111111000')
+    assert.equal(b.xor(a).toString(), '...111101011000010010101000110101001111111000')
+  });
+
+  it('should xor fuzz 11', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = -1;
+
+    assert.equal(a.xor(b).toString(), '1111111111111111111111111101011000010010101000110101001111111000')
+    assert.equal(b.xor(a).toString(), '1111111111111111111111111101011000010010101000110101001111111000')
+  });
+
+  it('should andNot fuzz 00', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = 0;
+
+    assert.equal(a.andNot(b).toString(), '1100111000')
+    assert.equal(b.andNot(a).toString(), '10100100010010101000110101000011000000')
+  });
+
+  it('should andNot fuzz 01', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = 0;
+    b._ = -1;
+
+    assert.equal(a.andNot(b).toString(), '1100111000')
+    assert.equal(b.andNot(a).toString(), '...11110100100010010101000110101000011000000')
+  });
+
+  it('should andNot fuzz 10', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = 0;
+
+    assert.equal(a.andNot(b).toString(), '...111101011000000000000000000000001100111000')
+    assert.equal(b.andNot(a).toString(), '10010101000110101000011000000')
+  });
+
+  it('should andNot fuzz 11', function() {
+
+    var a = new BitSet;
+    var b = new BitSet;
+
+    a.data = [0b11100111111];
+    b.data = [0b10010101000110101010011000111, 0b101001];
+    a._ = -1;
+    b._ = -1;
+
+    assert.equal(a.andNot(b).toString(), '1111111111111111111111111101011000000000000000000000001100111000')
+    assert.equal(b.andNot(a).toString(), '10010101000110101000011000000')
+  });
+
+
+
   it('should work with simple xor use case', function() {
     var bsa = new BitSet
     bsa.set(0);
@@ -502,9 +727,9 @@ describe('BitSet', function() {
     var x = new BitSet;
     x.set(4);
     x.set(32);
-    x.not();
+    x = x.not();
     x.set(65, 0);
-    x.not();
+    x = x.not();
     x.set(8, 1);
 
     assert.equal(x.cardinality(), 4);

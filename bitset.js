@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v4.1.0 14/08/2015
+ * @license BitSet.js v5.0.0 4/3/2018
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
@@ -250,6 +250,28 @@
       return (d[n] >>> ndx) & 1;
     },
     /**
+     * Creates the bitwise NOT of a set. The result is stored in-place.
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     *
+     * bs1.not();
+     *
+     * @returns {BitSet} this
+     */
+    'not': function() { // invert()
+
+      const t = this['clone']();
+      const d = t['data'];
+      for (let i = 0; i < d.length; i++) {
+        d[i] = ~d[i];
+      }
+
+      t['_'] = ~t['_'];
+
+      return t;
+    },
+    /**
      * Creates the bitwise AND of two sets. The result is stored in-place.
      *
      * Ex:
@@ -265,33 +287,34 @@
 
       parse(P, value);
 
-      const t = this['clone']();
-      const d = t['data'];
+      const T = this['clone']();
+      const t = T['data'];
       const p = P['data'];
 
+      const pl = p.length;
       const p_ = P['_'];
+      const t_ = T['_'];
 
-      const pl = p.length - 1;
-      const tl = d.length - 1;
-
-      let i = tl;
-
-      if (p_ === 0) {
-        // clear any bits set:
-        for (; i > pl; i--) {
-          d[i] = 0;
-        }
-
-        for (; i >= 0; i--) {
-          d[i] &= p[i];
-        }
-      } else {
-        // ???
+      // If this is infinite, we need all bits from P
+      if (t_ !== 0) {
+        scale(T, pl * WORD_LENGTH - 1);
       }
 
-      t['_'] &= p_;
+      const tl = t.length;
+      const l = Math.min(pl, tl);
+      let i = 0;
 
-      return t;
+      for (; i < l; i++) {
+        t[i] &= p[i];
+      }
+
+      for (; i < tl; i++) {
+        t[i] &= p_;
+      }
+
+      T['_'] &= p_;
+
+      return T;
     },
     /**
      * Creates the bitwise OR of two sets. The result is stored in-place.
@@ -328,28 +351,6 @@
       }
 
       t['_'] |= P['_'];
-
-      return t;
-    },
-    /**
-     * Creates the bitwise NOT of a set. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     *
-     * bs1.not();
-     *
-     * @returns {BitSet} this
-     */
-    'not': function() { // invert()
-
-      const t = this['clone']();
-      const d = t['data'];
-      for (let i = 0; i < d.length; i++) {
-        d[i] = ~d[i];
-      }
-
-      t['_'] = ~t['_'];
 
       return t;
     },
@@ -402,6 +403,22 @@
       return t;
     },
     /**
+     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     * bs2 = new BitSet(10);
+     *
+     * bs1.notAnd(bs2);
+     *
+     * @param {BitSet} val A bitset object
+     * @returns {BitSet} this
+     */
+    'andNot': function(val) { // difference
+
+      return this['and'](new BitSet(val)['flip']());
+    },
+    /**
      * Flip/Invert a range of bits by setting
      *
      * Ex:
@@ -427,8 +444,6 @@
 
       } else if (to === undefined) {
 
-        from |= 0;
-
         scale(this, from);
 
         this['data'][from >>> WORD_LOG] ^= (1 << from);
@@ -442,38 +457,6 @@
         }
       }
       return this;
-    },
-    /**
-     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     * bs2 = new BitSet(10);
-     *
-     * bs1.notAnd(bs2);
-     *
-     * @param {BitSet} val A bitset object
-     * @returns {BitSet} this
-     */
-    'andNot': function(val) { // difference
-
-      parse(P, val);
-
-      const t = this['clone']();
-      const d = t['data'];
-      const p = P['data'];
-
-      const t_ = this['_'];
-      const p_ = P['_'];
-
-      const l = Math.min(d.length, p.length);
-
-      for (let k = 0; k < l; k++) {
-        d[k] &= ~p[k];
-      }
-      t['_'] &= ~p_;
-
-      return t;
     },
     /**
      * Clear a range of bits by setting it to 0
