@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v5.0.1 4/3/2018
+ * @license BitSet.js v5.0.2 4/3/2018
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
@@ -956,9 +956,9 @@
     });
   } else if (typeof exports === 'object') {
     Object.defineProperty(exports, "__esModule", {'value': true});
+    BitSet['default'] = BitSet;
+    BitSet['BitSet'] = BitSet;
     module['exports'] = BitSet;
-    exports['Angles'] = BitSet;
-    exports['default'] = BitSet;
   } else {
     root['BitSet'] = BitSet;
   }
