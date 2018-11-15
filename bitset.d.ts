@@ -1,7 +1,7 @@
 ﻿export declare interface ReadOnlyBitSet
 {
     /**
-     * Creates the bitwise AND of two sets. The result is stored in-place.
+     * Creates the bitwise AND of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -15,7 +15,7 @@
     and(other: ReadOnlyBitSet): ReadOnlyBitSet;
 
     /**
-    * Creates the bitwise OR of two sets. The result is stored in-place.
+    * Creates the bitwise OR of two sets.
     *
     * Ex:
     * bs1 = new BitSet(10);
@@ -29,7 +29,7 @@
     or(other: ReadOnlyBitSet): ReadOnlyBitSet;
 
     /**
-     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
+     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -43,7 +43,7 @@
     andNot(other: ReadOnlyBitSet): ReadOnlyBitSet;
 
     /**
-    * Creates the bitwise NOT of a set. The result is stored in-place.
+    * Creates the bitwise NOT of a set.
     *
     * Ex:
     * bs1 = new BitSet(10);
@@ -56,7 +56,7 @@
     not(other: ReadOnlyBitSet): ReadOnlyBitSet;
 
     /**
-     * Creates the bitwise XOR of two sets. The result is stored in-place.
+     * Creates the bitwise XOR of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -117,9 +117,9 @@
     /**
      * Gets a list of set bits
      *
-     * @returns {Array|number}
+     * @returns {Array}
      */
-    toArray(): Array<number> | number
+    toArray(): Array<number>;
 
     /**
      * Calculates the number of bits set
