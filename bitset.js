@@ -250,7 +250,7 @@
       return (d[n] >>> ndx) & 1;
     },
     /**
-     * Creates the bitwise NOT of a set. The result is stored in-place.
+     * Creates the bitwise NOT of a set.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -272,7 +272,7 @@
       return t;
     },
     /**
-     * Creates the bitwise AND of two sets. The result is stored in-place.
+     * Creates the bitwise AND of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -317,7 +317,7 @@
       return T;
     },
     /**
-     * Creates the bitwise OR of two sets. The result is stored in-place.
+     * Creates the bitwise OR of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -355,7 +355,7 @@
       return t;
     },
     /**
-     * Creates the bitwise XOR of two sets. The result is stored in-place.
+     * Creates the bitwise XOR of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -403,7 +403,7 @@
       return t;
     },
     /**
-     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
+     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
@@ -581,7 +581,7 @@
     /**
      * Gets a list of set bits
      *
-     * @returns {Array|number}
+     * @returns {Array}
      */
     'toArray': Math['clz32'] ?
             function() {
