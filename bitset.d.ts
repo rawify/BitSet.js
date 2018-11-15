@@ -7,12 +7,12 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.and(bs2);
+     * res = bs1.and(bs2);
      *
      * @param {ReadOnlyBitSet} other A bitset object
-     * @returns {ReadOnlyBitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND of this and other
      */
-    and(other: ReadOnlyBitSet): ReadOnlyBitSet;
+    and(other: ReadOnlyBitSet): BitSet;
 
     /**
     * Creates the bitwise OR of two sets.
@@ -21,12 +21,12 @@
     * bs1 = new BitSet(10);
     * bs2 = new BitSet(10);
     *
-    * bs1.or(bs2);
+    * res = bs1.or(bs2);
     *
     * @param {ReadOnlyBitSet} other A bitset object
-    * @returns {ReadOnlyBitSet} this
+    * @returns {BitSet} A new BitSet object, containing the bitwise OR of this and other
     */
-    or(other: ReadOnlyBitSet): ReadOnlyBitSet;
+    or(other: ReadOnlyBitSet): BitSet;
 
     /**
      * Creates the bitwise AND NOT (not confuse with NAND!) of two sets.
@@ -35,12 +35,12 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.notAnd(bs2);
+     * res = bs1.notAnd(bs2);
      *
      * @param {ReadOnlyBitSet} other A bitset object
-     * @returns {ReadOnlyBitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND NOT of this and other
      */
-    andNot(other: ReadOnlyBitSet): ReadOnlyBitSet;
+    andNot(other: ReadOnlyBitSet): BitSet;
 
     /**
     * Creates the bitwise NOT of a set.
@@ -48,12 +48,11 @@
     * Ex:
     * bs1 = new BitSet(10);
     *
-    * bs1.not();
+    * res = bs1.not();
     *
-    * @param {ReadOnlyBitSet} other A bitset object
-    * @returns {ReadOnlyBitSet} this
+    * @returns {BitSet} A new BitSet object, containing the bitwise NOT of this
     */
-    not(other: ReadOnlyBitSet): ReadOnlyBitSet;
+    not(): BitSet;
 
     /**
      * Creates the bitwise XOR of two sets.
@@ -62,12 +61,12 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.xor(bs2);
+     * res = bs1.xor(bs2);
      *
      * @param {ReadOnlyBitSet} other A bitset object
-     * @returns {ReadOnlyBitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise XOR of this and other
      */
-    xor(other: ReadOnlyBitSet): ReadOnlyBitSet;
+    xor(other: ReadOnlyBitSet): BitSet;
 
     /**
      * Compares two BitSet objects
@@ -79,7 +78,7 @@
      * bs1.equals(bs2) ? 'yes' : 'no'
      *
      * @param {ReadOnlyBitSet} other A bitset object
-     * @returns {boolean} Whether the two BitSets are similar
+     * @returns {boolean} Whether the two BitSets have the same bits set (valid for indefinite sets as well)
      */
     equals(other: ReadOnlyBitSet): boolean;
 
@@ -88,11 +87,12 @@
     *
     * Ex:
     * bs1 = new BitSet(10);
+    * 
     * bs2 = bs1.clone();
     *
     * @returns {ReadOnlyBitSet} A new BitSet object, containing a copy of the actual object
     */
-    clone(): ReadOnlyBitSet;
+    clone(): BitSet;
 
     /**
      * Check if the BitSet is empty, means all bits are unset
@@ -127,7 +127,7 @@
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var num = bs1.cardinality();
+     * num = bs1.cardinality();
      *
      * @returns {number} The number of bits set
      */
@@ -139,9 +139,9 @@
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var logbase2 = bs1.msb();
+     * logbase2 = bs1.msb();
      *
-     * var truncatedTwo = Math.pow(2, logbase2); // May overflow!
+     * truncatedTwo = Math.pow(2, logbase2); // May overflow!
      *
      * @returns {number} The index of the highest bit set
      */
@@ -153,7 +153,7 @@
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var lsb = bs1.lsb();
+     * lsb = bs1.lsb();
      *
      * @returns {number} The index of the lowest bit set
      */
@@ -165,7 +165,7 @@
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var ntz = bs1.ntz();
+     * ntz = bs1.ntz();
      *
      * @returns {number} The index of the lowest bit set
      */
@@ -176,48 +176,34 @@
      *
      * Ex:
      * bs1 = new BitSet();
-     * var isValid = bs1.get(12);
+     * isValid = bs1.get(12);
      *
      * @param {number} index the index to be fetched
      * @returns {number|null} The binary flag
      */
-    get(index: number): number | null;
+    get(index: number): number;
 
     /**
      * Gets an entire range as a new bitset object
      *
      * Ex:
      * bs1 = new BitSet();
-     * bs1.slice(4, 8);
+     * 
+     * var res = bs1.slice(4, 8);
      *
      * @param {number=} fromIndex The start index of the range to be get
      * @param {number=} toIndex The end index of the range to be get
-     * @returns {BitSet|Object} A new smaller bitset object, containing the extracted range
+     * @returns {BitSet|null} A new smaller bitset object, containing the extracted range
      */
-    slice(fromIndex?: number, toIndex?: number): ReadOnlyBitSet;
-
-    /**
-    * Flip/Invert a range of bits by setting
-    *
-    * Ex:
-    * bs1 = new BitSet();
-    * bs1.flip(); // Flip entire set
-    * bs1.flip(5); // Flip single bit
-    * bs1.flip(3,10); // Flip a bit range
-    *
-    * @param {number=} fromIndex The start index of the range to be flipped
-    * @param {number=} toIndex The end index of the range to be flipped
-    * @returns {BitSet} this
-    */
-    flip(fromIndex?: number, toIndex?: number): ReadOnlyBitSet;
+    slice(fromIndex?: number, toIndex?: number): BitSet;
 }
 export declare var ReadOnlyBitSet: ReadOnlyBitSet;
 
-export declare class BitSet
+export declare class BitSet implements ReadOnlyBitSet
 {
     /**
      * @constructor create a new BitSet
-     * @param {String | number | BitSet | Array<number> | Uint8Arra} input
+     * @param {String | number | BitSet | Array<number> | Uint8Array | ReadOnlyBitSet} input
      *
      * Strings
      *
@@ -233,84 +219,84 @@ export declare class BitSet
      *
      * Number
      * - A binary value
-     * BitSet
-     * - A BitSet object, which get copied over
+     * 
+     * BitSet | ReadOnlyBitSet
+     * - A BitSet object, which is cloned
      *
      */
-    constructor(input?: String | number | BitSet | Array<number> | Uint8Array);
+    constructor(input?: String | number | BitSet | Array<number> | Uint8Array | ReadOnlyBitSet);
 
     public static fromBinaryString(str: string): BitSet;
     public static fromHexString(str: string): BitSet;
     public static Random(n: number): BitSet;
 
     /**
-    * Creates the bitwise AND of two sets. The result is stored in-place.
+     * Creates the bitwise AND of two sets.
+     *
+     * Ex:
+     * bs1 = new BitSet(10);
+     * bs2 = new BitSet(10);
+     *
+     * res = bs1.and(bs2);
+     *
+     * @param {ReadOnlyBitSet} other A bitset object
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND of this and other
+     */
+    and(other: ReadOnlyBitSet): BitSet;
+
+    /**
+    * Creates the bitwise OR of two sets.
     *
     * Ex:
     * bs1 = new BitSet(10);
     * bs2 = new BitSet(10);
     *
-    * bs1.and(bs2);
+    * res = bs1.or(bs2);
     *
-    * @param {BitSet} other A bitset object
-    * @returns {BitSet} this
+    * @param {ReadOnlyBitSet} other A bitset object
+    * @returns {BitSet} A new BitSet object, containing the bitwise OR of this and other
     */
-    public and(other: BitSet): BitSet;
+    or(other: ReadOnlyBitSet): BitSet;
 
     /**
-     * Creates the bitwise OR of two sets. The result is stored in-place.
+     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.or(bs2);
+     * res = bs1.notAnd(bs2);
      *
-     * @param {BitSet} other A bitset object
-     * @returns {BitSet} this
+     * @param {ReadOnlyBitSet} other A bitset object
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND NOT of this and other
      */
-    public or(other: BitSet): BitSet;
+    andNot(other: ReadOnlyBitSet): BitSet;
 
     /**
-     * Creates the bitwise AND NOT (not confuse with NAND!) of two sets. The result is stored in-place.
+    * Creates the bitwise NOT of a set.
+    *
+    * Ex:
+    * bs1 = new BitSet(10);
+    *
+    * res = bs1.not();
+    *
+    * @returns {BitSet} A new BitSet object, containing the bitwise NOT of this
+    */
+    not(): BitSet;
+
+    /**
+     * Creates the bitwise XOR of two sets.
      *
      * Ex:
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.notAnd(bs2);
+     * res = bs1.xor(bs2);
      *
-     * @param {BitSet} other A bitset object
-     * @returns {BitSet} this
+     * @param {ReadOnlyBitSet} other A bitset object
+     * @returns {BitSet} A new BitSet object, containing the bitwise XOR of this and other
      */
-    public andNot(other: BitSet): BitSet;
-
-    /**
-     * Creates the bitwise NOT of a set. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     *
-     * bs1.not();
-     *
-     * @param {BitSet} other A bitset object
-     * @returns {BitSet} this
-     */
-    public not(other: BitSet): BitSet;
-
-    /**
-     * Creates the bitwise XOR of two sets. The result is stored in-place.
-     *
-     * Ex:
-     * bs1 = new BitSet(10);
-     * bs2 = new BitSet(10);
-     *
-     * bs1.xor(bs2);
-     *
-     * @param {BitSet} other A bitset object
-     * @returns {BitSet} this
-     */
-    public xor(other: BitSet): BitSet;
+    xor(other: ReadOnlyBitSet): BitSet;
 
     /**
      * Compares two BitSet objects
@@ -321,21 +307,22 @@ export declare class BitSet
      *
      * bs1.equals(bs2) ? 'yes' : 'no'
      *
-     * @param {BitSet} other A bitset object
-     * @returns {boolean} Whether the two BitSets are similar
+     * @param {ReadOnlyBitSet} other A bitset object
+     * @returns {boolean} Whether the two BitSets have the same bits set (valid for indefinite sets as well)
      */
-    public equals(other: BitSet): boolean;
+    equals(other: ReadOnlyBitSet): boolean;
 
     /**
     * Clones the actual object
     *
     * Ex:
     * bs1 = new BitSet(10);
+    * 
     * bs2 = bs1.clone();
     *
-    * @returns {BitSet} A new BitSet object, containing a copy of the actual object
+    * @returns {ReadOnlyBitSet} A new BitSet object, containing a copy of the actual object
     */
-    public clone(): BitSet;
+    clone(): BitSet;
 
     /**
      * Check if the BitSet is empty, means all bits are unset
@@ -347,7 +334,7 @@ export declare class BitSet
      *
      * @returns {boolean} Whether the bitset is empty
      */
-    public isEmpty(): boolean;
+    isEmpty(): boolean;
 
     /**
      * Overrides the toString method to get a binary representation of the BitSet
@@ -355,14 +342,14 @@ export declare class BitSet
      * @param {number=} base
      * @returns string A binary string
      */
-    public toString(base?: number): string;
+    toString(base?: number): string;
 
     /**
      * Gets a list of set bits
      *
-     * @returns {Array|number}
+     * @returns {Array}
      */
-    toArray(): Array<number> | number
+    toArray(): Array<number>;
 
     /**
      * Calculates the number of bits set
@@ -370,11 +357,11 @@ export declare class BitSet
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var num = bs1.cardinality();
+     * num = bs1.cardinality();
      *
      * @returns {number} The number of bits set
      */
-    public cardinality(): number;
+    cardinality(): number;
 
     /**
      * Calculates the Most Significant Bit / log base two
@@ -382,13 +369,13 @@ export declare class BitSet
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var logbase2 = bs1.msb();
+     * logbase2 = bs1.msb();
      *
-     * var truncatedTwo = Math.pow(2, logbase2); // May overflow!
+     * truncatedTwo = Math.pow(2, logbase2); // May overflow!
      *
      * @returns {number} The index of the highest bit set
      */
-    public msb(): number;
+    msb(): number;
 
     /**
      * Calculates the Least Significant Bit
@@ -396,11 +383,11 @@ export declare class BitSet
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var lsb = bs1.lsb();
+     * lsb = bs1.lsb();
      *
      * @returns {number} The index of the lowest bit set
      */
-    public lsb(): number;
+    lsb(): number;
 
     /**
      * Calculates the number of trailing zeros
@@ -408,11 +395,37 @@ export declare class BitSet
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * var ntz = bs1.ntz();
+     * ntz = bs1.ntz();
      *
      * @returns {number} The index of the lowest bit set
      */
-    public ntz(): number;
+    ntz(): number;
+
+    /**
+     * Get a single bit flag of a certain bit position
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * isValid = bs1.get(12);
+     *
+     * @param {number} index the index to be fetched
+     * @returns {number|null} The binary flag
+     */
+    get(index: number): number;
+
+    /**
+     * Gets an entire range as a new bitset object
+     *
+     * Ex:
+     * bs1 = new BitSet();
+     * 
+     * var res = bs1.slice(4, 8);
+     *
+     * @param {number=} fromIndex The start index of the range to be get
+     * @param {number=} toIndex The end index of the range to be get
+     * @returns {BitSet|null} A new smaller bitset object, containing the extracted range
+     */
+    slice(fromIndex?: number, toIndex?: number): BitSet;
 
     /**
      * Set a single bit flag
@@ -442,31 +455,6 @@ export declare class BitSet
      * @returns {BitSet} this
      */
     public setRange(fromIndex: number, toIndex: number, value?: number | string): BitSet;
-
-    /**
-     * Get a single bit flag of a certain bit position
-     *
-     * Ex:
-     * bs1 = new BitSet();
-     * var isValid = bs1.get(12);
-     *
-     * @param {number} index the index to be fetched
-     * @returns {number|null} The binary flag
-     */
-    public get(index: number): number | null;
-
-    /**
-     * Gets an entire range as a new bitset object
-     *
-     * Ex:
-     * bs1 = new BitSet();
-     * bs1.slice(4, 8);
-     *
-     * @param {number=} fromIndex The start index of the range to be get
-     * @param {number=} toIndex The end index of the range to be get
-     * @returns {BitSet} A new smaller bitset object, containing the extracted range
-     */
-    public slice(fromIndex?: number, toIndex?: number): BitSet;
 
     /**
      * Clear a range of bits by setting it to 0
