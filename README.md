@@ -118,11 +118,11 @@ Functions
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
 
 
-BitSet set(ndx[, value=0)
+BitSet set(ndx[, value=0])
 ---
 Mutable; Sets value 0 or 1 to index `ndx` of the bitset
 
-int get(int ndx)
+int get(ndx)
 ---
 Gets the value at index ndx
 
@@ -130,7 +130,7 @@ BitSet setRange(from, to[, value=1])
 ---
 Mutable; Helper function for set, to set an entire range to a given value
 
-BitSet clear([from[, to])
+BitSet clear([from[, to]])
 ---
 Mutable; Sets a portion of a given bitset to zero
 
@@ -138,7 +138,7 @@ Mutable; Sets a portion of a given bitset to zero
 - If one param is given, the bit at this index gets cleared
 - If two params are given, the range is cleared
 
-BitSet slice([from[, to])
+BitSet slice([from[, to]])
 ---
 Immutable; Extracts a portion of a given bitset as a new bitset
 
@@ -146,7 +146,7 @@ Immutable; Extracts a portion of a given bitset as a new bitset
 - If one param is given, the index is used as offset
 - If two params are given, the range is returned as new BitSet
 
-BitSet flip([from[, to])
+BitSet flip([from[, to]])
 ---
 Mutable; Toggles a portion of a given bitset
 
@@ -218,7 +218,7 @@ BitSet.fromHexString(str)
 ---
 Alternative constructor to pass a hex string
 
-BitSet.Random(n=32)
+BitSet.Random([n=32])
 ---
 Create a random BitSet with a maximum length of n bits
 
