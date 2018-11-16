@@ -235,7 +235,7 @@
      * var isValid = bs1.get(12);
      *
      * @param {number} ndx the index to be fetched
-     * @returns {number|null} The binary flag
+     * @returns {number} The binary flag
      */
     'get': function(ndx) {
 
@@ -255,9 +255,9 @@
      * Ex:
      * bs1 = new BitSet(10);
      *
-     * bs1.not();
+     * res = bs1.not();
      *
-     * @returns {BitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise NOT of this
      */
     'not': function() { // invert()
 
@@ -278,10 +278,10 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.and(bs2);
+     * res = bs1.and(bs2);
      *
      * @param {BitSet} value A bitset object
-     * @returns {BitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND of this and value
      */
     'and': function(value) {// intersection
 
@@ -323,10 +323,10 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.or(bs2);
+     * res = bs1.or(bs2);
      *
      * @param {BitSet} val A bitset object
-     * @returns {BitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise OR of this and val
      */
     'or': function(val) { // union
 
@@ -361,10 +361,10 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.xor(bs2);
+     * res = bs1.xor(bs2);
      *
      * @param {BitSet} val A bitset object
-     * @returns {BitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise XOR of this and val
      */
     'xor': function(val) { // symmetric difference
 
@@ -409,10 +409,10 @@
      * bs1 = new BitSet(10);
      * bs2 = new BitSet(10);
      *
-     * bs1.notAnd(bs2);
+     * res = bs1.notAnd(bs2);
      *
      * @param {BitSet} val A bitset object
-     * @returns {BitSet} this
+     * @returns {BitSet} A new BitSet object, containing the bitwise AND NOT of this and other
      */
     'andNot': function(val) { // difference
 
@@ -465,7 +465,7 @@
      * bs1 = new BitSet();
      * bs1.clear(); // Clear entire set
      * bs1.clear(5); // Clear single bit
-     * bs1.clar(3,10); // Clear a bit range
+     * bs1.clear(3,10); // Clear a bit range
      *
      * @param {number=} from The start index of the range to be cleared
      * @param {number=} to The end index of the range to be cleared
@@ -509,7 +509,7 @@
      *
      * @param {number=} from The start index of the range to be get
      * @param {number=} to The end index of the range to be get
-     * @returns {BitSet|Object} A new smaller bitset object, containing the extracted range
+     * @returns {BitSet} A new smaller bitset object, containing the extracted range
      */
     'slice': function(from, to) {
 
@@ -870,7 +870,7 @@
      * bs1.equals(bs2) ? 'yes' : 'no'
      *
      * @param {BitSet} val A bitset object
-     * @returns {boolean} Whether the two BitSets are similar
+     * @returns {boolean} Whether the two BitSets have the same bits set (valid for indefinite sets as well)
      */
     'equals': function(val) {
 
