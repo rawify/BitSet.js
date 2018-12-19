@@ -244,7 +244,7 @@
       var d = this['data'];
       var n = ndx >>> WORD_LOG;
 
-      if (n > d.length) {
+      if (n >= d.length) {
         return this['_'] & 1;
       }
       return (d[n] >>> ndx) & 1;

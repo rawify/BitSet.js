@@ -737,6 +737,14 @@ describe('BitSet', function() {
     assert.deepEqual(x.toArray(), [4, 8, 32, 65]);
   });
 
+  it('get higher bits correctly', function() {
+
+    var a = new BitSet([34]).not();
+    var b = new BitSet().set(34, 1).not();
+
+    assert.equal(a.get(80), b.get(80));
+  });
+
   it('should withstand some fuzz', function() {
 
     for (var i = 0; i < 100; i++) {
