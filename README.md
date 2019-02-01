@@ -156,15 +156,15 @@ Mutable; Toggles a portion of a given bitset
 
 BitSet not()
 ---
-Immutable; Calculates the bitwise not
+Immutable; Calculates the bitwise complement
 
 BitSet and(Mixed x)
 ---
-Immutable; Calculates the bitwise and between two bitsets
+Immutable; Calculates the bitwise intersection of two bitsets
 
 BitSet or(Mixed x)
 ---
-Immutable; Calculates the bitwise or between two bitsets
+Immutable; Calculates the bitwise union of two bitsets
 
 BitSet xor(Mixed x)
 ---
@@ -172,7 +172,7 @@ Immutable; Calculates the bitwise xor between two bitsets
 
 BitSet andNot(Mixed x)
 ---
-Immutable; Calculates the bitwise andNot between two bitsets (this is not the nand operation!)
+Immutable; Calculates the bitwise difference of two bitsets (this is not the nand operation!)
 
 BitSet clone()
 ---
