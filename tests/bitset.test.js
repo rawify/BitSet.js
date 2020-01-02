@@ -2,7 +2,7 @@
 var assert = require('assert');
 var should = require('should');
 
-var BitSet = require('../bitset');
+var BitSet = require('../bitset.min');
 
 describe('BitSet', function() {
 
@@ -805,5 +805,18 @@ describe('BitSet', function() {
     assert.equal(bs1.toString(), '11101');
     bs1.clear();
     assert.equal(bs1.toString(), '0');
+  });
+
+  it('should iterate', function() {
+
+    var val = "1111010101111010101010101111110010101010111110101001101010101011101010101111100011111100101011";
+
+    var bs = BitSet(val);
+
+    var str = "";
+    for (var b of bs) {
+      str+= b;
+    }
+    assert.equal(str, val.split("").reverse().join(""));
   });
 });

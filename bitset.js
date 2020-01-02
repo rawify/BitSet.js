@@ -1,5 +1,5 @@
 /**
- * @license BitSet.js v5.0.5 4/3/2018
+ * @license BitSet.js v5.1.0 4/3/2018
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
@@ -907,6 +907,72 @@
           return false;
       }
       return true;
+    },
+    [Symbol.iterator]: function () {
+
+      var d = this['data'];
+      var ndx = 0;
+
+      if (this['_'] === 0) {
+
+        // Find highest index with something meaningful
+        var highest = 0;
+        for (var i = d.length - 1; i >= 0; i--) {
+          if (d[i] !== 0) {
+            highest = i;
+            break;
+          }
+        }
+
+        return {
+          'next': function () {
+
+            var n = ndx >>> WORD_LOG;
+
+            if (n < highest) {
+
+              return {
+                'done': false,
+                'value': (d[n] >>> ndx++) & 1,
+              };
+
+            } else if (n === highest) {
+
+              return {
+                'done': (d[n] >>> ndx) === 0,
+                'value': (d[n] >>> ndx++) & 1
+              };
+
+            } else {
+
+              return {
+                'done': true,
+                'value': 0,
+              };
+            }
+          }
+        };
+
+      } else {
+        // Endless iterator!
+        return {
+          'next': function () {
+            var n = ndx >>> WORD_LOG;
+
+            if (n < d.length) {
+              return {
+                'done': false,
+                'value': (d[n] >>> ndx++) & 1,
+              };
+            } else {
+              return {
+                'done': false,
+                'value': 1,
+              };
+            }
+          }
+        };
+      }
     }
   };
 
