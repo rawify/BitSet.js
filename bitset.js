@@ -1,8 +1,8 @@
 /**
- * @license BitSet.js v5.1.0 4/3/2018
+ * @license BitSet.js v5.1.0 2/1/2020
  * http://www.xarg.org/2014/03/javascript-bit-array/
  *
- * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
+ * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 (function(root) {
@@ -926,30 +926,12 @@
 
         return {
           'next': function () {
-
             var n = ndx >>> WORD_LOG;
 
-            if (n < highest) {
-
-              return {
-                'done': false,
-                'value': (d[n] >>> ndx++) & 1,
-              };
-
-            } else if (n === highest) {
-
-              return {
-                'done': (d[n] >>> ndx) === 0,
-                'value': (d[n] >>> ndx++) & 1
-              };
-
-            } else {
-
-              return {
-                'done': true,
-                'value': 0,
-              };
-            }
+            return {
+              'done': n > highest || n === highest && (d[n] >>> ndx) === 0,
+              'value': n > highest ? 0 : (d[n] >>> ndx++) & 1
+            };
           }
         };
 
@@ -959,17 +941,10 @@
           'next': function () {
             var n = ndx >>> WORD_LOG;
 
-            if (n < d.length) {
-              return {
-                'done': false,
-                'value': (d[n] >>> ndx++) & 1,
-              };
-            } else {
-              return {
-                'done': false,
-                'value': 1,
-              };
-            }
+            return {
+              'done': false,
+              'value': n < d.length ? (d[n] >>> ndx++) & 1 : 1,
+            };
           }
         };
       }

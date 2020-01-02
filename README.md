@@ -13,7 +13,7 @@ Examples
 Basic usage
 ---
 ```javascript
-var bs = new BitSet;
+let bs = new BitSet;
 bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
@@ -21,12 +21,12 @@ console.log(bs.toString(16)); // Print out a hex dump with one bit set
 Flipping bits
 ---
 ```javascript
-var bs = new BitSet;
+let bs = new BitSet;
 bs
   .flip(0, 62)
   .flip(29, 35);
 
-var str = bs.toString();
+let str = bs.toString();
 
 if (str === "111111111111111111111111111000000011111111111111111111111111111") {
    console.log("YES!");
@@ -36,7 +36,7 @@ if (str === "111111111111111111111111111000000011111111111111111111111111111") {
 Range Set
 ---
 ```javascript
-var bs = new BitSet;
+let bs = new BitSet;
 bs.setRange(10, 18, 1); // Set a 1 between 10 and 18, inclusive
 ```
 
@@ -44,16 +44,16 @@ User permissions
 ---
 If you want to store user permissions in your database and use BitSet for the bit twiddling, you can start with the following Linux-style snippet:
 ```javascript
-var P_READ  = 2; // Bit pos
-var P_WRITE = 1;
-var P_EXEC  = 0;
+let P_READ  = 2; // Bit pos
+let P_WRITE = 1;
+let P_EXEC  = 0;
 
-var user = new BitSet;
+let user = new BitSet;
 user.set(P_READ); // Give read perms
 user.set(P_WRITE); // Give write perms
 
-var group = new BitSet(P_READ);
-var world = new BitSet(P_EXEC);
+let group = new BitSet(P_READ);
+let world = new BitSet(P_EXEC);
 
 console.log("0" + user.toString(8) + group.toString(8) + world.toString(8));
 ```
@@ -221,6 +221,19 @@ Alternative constructor to pass a hex string
 BitSet.Random([n=32])
 ---
 Create a random BitSet with a maximum length of n bits
+
+Iterator Interface
+===
+A `BitSet` object is iterable. The iterator gets all bits up to the most significant bit. If no bits are set, the iteration stops immediately.
+
+```js
+let bs = BitSet.Random(55);
+for (let b of bs) {
+  console.log(b);
+} 
+```
+
+Note: If the bitset is inverted so that all leading bits are 1, the iterator must be stopped by the user!
 
 Coding Style
 ===

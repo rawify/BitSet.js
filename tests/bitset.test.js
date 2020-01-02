@@ -819,4 +819,30 @@ describe('BitSet', function() {
     }
     assert.equal(str, val.split("").reverse().join(""));
   });
+
+  it('should iterate zero', function() {
+
+    var val = "0";
+
+    var bs = BitSet(val);
+
+    var str = "";
+    for (var b of bs) {
+      str+= b;
+    }
+    assert.equal(str, "");
+  });
+
+  it('should iterate one', function() {
+
+    var val = "1";
+
+    var bs = BitSet(val);
+
+    var str = "";
+    for (var b of bs) {
+      str+= b;
+    }
+    assert.equal(str, val);
+  });
 });
