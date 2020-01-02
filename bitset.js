@@ -584,48 +584,48 @@
      * @returns {Array}
      */
     'toArray': Math['clz32'] ?
-            function() {
+    function() {
 
-              var ret = [];
-              var data = this['data'];
+      var ret = [];
+      var data = this['data'];
 
-              for (var i = data.length - 1; i >= 0; i--) {
+      for (var i = data.length - 1; i >= 0; i--) {
 
-                var num = data[i];
+        var num = data[i];
 
-                while (num !== 0) {
-                  var t = 31 - Math['clz32'](num);
-                  num ^= 1 << t;
-                  ret.unshift((i * WORD_LENGTH) + t);
-                }
-              }
+        while (num !== 0) {
+          var t = 31 - Math['clz32'](num);
+          num ^= 1 << t;
+          ret.unshift((i * WORD_LENGTH) + t);
+        }
+      }
 
-              if (this['_'] !== 0)
-                ret.push(Infinity);
+      if (this['_'] !== 0)
+        ret.push(Infinity);
 
-              return ret;
-            } :
-            function() {
+      return ret;
+    } :
+    function() {
 
-              var ret = [];
-              var data = this['data'];
+      var ret = [];
+      var data = this['data'];
 
-              for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < data.length; i++) {
 
-                var num = data[i];
+        var num = data[i];
 
-                while (num !== 0) {
-                  var t = num & -num;
-                  num ^= t;
-                  ret.push((i * WORD_LENGTH) + popCount(t - 1));
-                }
-              }
+        while (num !== 0) {
+          var t = num & -num;
+          num ^= t;
+          ret.push((i * WORD_LENGTH) + popCount(t - 1));
+        }
+      }
 
-              if (this['_'] !== 0)
-                ret.push(Infinity);
+      if (this['_'] !== 0)
+        ret.push(Infinity);
 
-              return ret;
-            },
+      return ret;
+    },
     /**
      * Overrides the toString method to get a binary representation of the BitSet
      *
@@ -763,46 +763,46 @@
      * @returns {number} The index of the highest bit set
      */
     'msb': Math['clz32'] ?
-            function() {
+    function() {
 
-              if (this['_'] !== 0) {
-                return Infinity;
-              }
+      if (this['_'] !== 0) {
+        return Infinity;
+      }
 
-              var data = this['data'];
+      var data = this['data'];
 
-              for (var i = data.length; i-- > 0; ) {
+      for (var i = data.length; i-- > 0;) {
 
-                var c = Math['clz32'](data[i]);
+        var c = Math['clz32'](data[i]);
 
-                if (c !== WORD_LENGTH) {
-                  return (i * WORD_LENGTH) + WORD_LENGTH - 1 - c;
-                }
-              }
-              return Infinity;
-            } :
-            function() {
+        if (c !== WORD_LENGTH) {
+          return (i * WORD_LENGTH) + WORD_LENGTH - 1 - c;
+        }
+      }
+      return Infinity;
+    } :
+    function() {
 
-              if (this['_'] !== 0) {
-                return Infinity;
-              }
+      if (this['_'] !== 0) {
+        return Infinity;
+      }
 
-              var data = this['data'];
+      var data = this['data'];
 
-              for (var i = data.length; i-- > 0; ) {
+      for (var i = data.length; i-- > 0;) {
 
-                var v = data[i];
-                var c = 0;
+        var v = data[i];
+        var c = 0;
 
-                if (v) {
+        if (v) {
 
-                  for (; (v >>>= 1) > 0; c++) {
-                  }
-                  return (i * WORD_LENGTH) + c;
-                }
-              }
-              return Infinity;
-            },
+          for (; (v >>>= 1) > 0; c++) {
+          }
+          return (i * WORD_LENGTH) + c;
+        }
+      }
+      return Infinity;
+    },
     /**
      * Calculates the number of trailing zeros
      *
@@ -922,7 +922,7 @@
 
   BitSet['Random'] = function(n) {
 
-    if (n === undefined || n < 0) {
+    if (n === undefined || n < 0) {
       n = WORD_LENGTH;
     }
 
@@ -937,7 +937,7 @@
 
     // Fill the vector with random data, uniformally distributed
     for (var i = 0; i < len; i++) {
-      t.push(Math.random() * 4294967296 | 0);
+      t.push(Math.random() * 4294967296 | 0);
     }
 
     // Mask out unwanted bits
@@ -955,7 +955,7 @@
       return BitSet;
     });
   } else if (typeof exports === 'object') {
-    Object.defineProperty(exports, "__esModule", {'value': true});
+    Object.defineProperty(exports, "__esModule", { 'value': true });
     BitSet['default'] = BitSet;
     BitSet['BitSet'] = BitSet;
     module['exports'] = BitSet;
