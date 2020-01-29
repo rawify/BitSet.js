@@ -90,26 +90,22 @@ function(BitSet) {
 </script>
 ```
 
-Parser
+Constructor
 ===
-The parser accepts the following types of values in either function
+The default `BitSet` constructor accepts a single value of one the following types :
 
-Strings
-- Binary strings "010101"
-- Binary strings with prefix "0b100101"
-- Hexadecimal strings with prefix "0xaffe"
-
-**Arrays**
-- The values of the array are the indizes to be set to 1
-
-**Uint8Array**
-- A binary representation in 8 bit form
-
-**Number**
-- A binary value
-
-**BitSet**
-- A BitSet object, which get copied over
+- String
+  - Binary strings : `new BitSet("010101")`
+  - Binary strings with prefix : `new BitSet("0b010101")`
+  - Hexadecimal strings with prefix `new BitSet("0xaffe")`
+- Array
+  - The values of the array are the indices to be set to 1 : `new BitSet([1,12,9])`
+- [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)
+  - A binary representation in 8 bit form
+- Number
+  - A binary value
+- BitSet
+  - A BitSet object, which get copied over
 
 
 Functions
