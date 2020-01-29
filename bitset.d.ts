@@ -490,6 +490,11 @@ export declare class BitSet implements ReadOnlyBitSet
      * @returns {BitSet} this
      */
     public flip(fromIndex?: number, toIndex?: number): BitSet;
+
+    /**
+    * Iterates over the set bits
+    */
+    [Symbol.iterator](): Iterator<number>;
 }
 
 export default BitSet;
