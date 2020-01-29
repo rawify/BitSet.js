@@ -1,4 +1,4 @@
-﻿export declare interface ReadOnlyBitSet
+export declare interface ReadOnlyBitSet
 {
     /**
      * Creates the bitwise AND of two sets.
@@ -196,6 +196,11 @@
      * @returns {BitSet|null} A new smaller bitset object, containing the extracted range
      */
     slice(fromIndex?: number, toIndex?: number): BitSet;
+    
+    /**
+    * Iterates over the set bits
+    */
+    [Symbol.iterator](): Iterator<number>;
 }
 export declare var ReadOnlyBitSet: ReadOnlyBitSet;
 
