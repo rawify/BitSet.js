@@ -486,3 +486,5 @@ export declare class BitSet implements ReadOnlyBitSet
      */
     public flip(fromIndex?: number, toIndex?: number): BitSet;
 }
+
+export default BitSet;
