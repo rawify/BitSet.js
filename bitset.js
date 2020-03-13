@@ -227,6 +227,40 @@
       }
       return this;
     },
+    'lshift': function(count) {
+      count |= 0;
+
+      scale(this, this['msb']() + count)
+
+      var d = this['data'];
+      for (var j = 0; j < count / WORD_LENGTH; j++) {
+        var thisShift = Math.min(WORD_LENGTH, count - j * WORD_LENGTH)
+        var incoming = 0;
+        for (var i = 0; i < d.length; i++) {
+          var outgoing = d[i] >>> (WORD_LENGTH - thisShift)
+          d[i] = thisShift === WORD_LENGTH ? 0 : d[i] << thisShift
+          d[i] |= incoming
+          incoming = outgoing
+        }
+      }
+      return this;
+    },
+    'rshift': function(count) {
+      count |= 0;
+
+      var d = this['data'];
+      for (var j = 0; j < count / WORD_LENGTH; j++) {
+        var thisShift = Math.min(WORD_LENGTH, count - j * WORD_LENGTH)
+        var incoming = 0;
+        for (var i = d.length - 1; i >= 0; i--) {
+          var outgoing = thisShift === WORD_LENGTH ? d[i] : (d[i] & ((1 << thisShift) - 1)) << (WORD_LENGTH - thisShift)
+          d[i] = thisShift === WORD_LENGTH ? 0 : d[i] >>> thisShift
+          d[i] |= incoming
+          incoming = outgoing
+        }
+      }
+      return this;
+    },
     /**
      * Get a single bit flag of a certain bit position
      *

@@ -845,4 +845,67 @@ describe('BitSet', function() {
     }
     assert.equal(str, val);
   });
+  
+  it('should lshift', () => {
+    const b = new BitSet('1010')
+    b.lshift(1)
+    assert.equal(b.toString(), '10100')
+
+    b.lshift(3)
+    assert.equal(b.toString(), '10100000')
+    b.lshift(3)
+    assert.equal(b.toString(), '10100000000')
+    b.lshift(3)
+    assert.equal(b.toString(), '10100000000000')
+    b.lshift(3)
+    assert.equal(b.toString(), '10100000000000000')
+  })
+
+  it('should lshift 32 bits', () => {
+    const b = new BitSet('1010')
+    assert.equal(b.toString(16), 'a')
+    b.lshift(32)
+    assert.equal(b.toString(16), 'a00000000')
+    b.lshift(1)
+    assert.equal(b.toString(16), '1400000000')
+  })
+
+  it('should lshift bigger than 32 bits', () => {
+    const b = new BitSet('1010')
+    assert.equal(b.toString(16), 'a')
+    b.lshift(65)
+    assert.equal(b.toString(16), '140000000000000000')
+  })
+
+  it('should lshift over the 32 bit boundary', () => {
+    const b = new BitSet('10000000000000000000000000000000')
+    assert.equal(b.toString(16), '80000000')
+    b.lshift(1)
+    assert.equal(b.toString(16), '100000000')
+  })
+
+  it('should rshift', () => {
+    const b = new BitSet('1010')
+    b.rshift(1)
+    assert.equal(b.toString(), '101')
+
+    b.rshift(2)
+    assert.equal(b.toString(), '1')
+  })
+
+  it('should rshift 32 bits', () => {
+    const b = BitSet.fromHexString('1400000000')
+    b.rshift(1)
+    assert.equal(b.toString(16), 'a00000000')
+    b.rshift(32)
+    assert.equal(b.toString(16), 'a')
+  })
+
+  it('should rshift over the 32 bit boundary', () => {
+    const b = new BitSet('100000000000000000000000000000000')
+    assert.equal(b.toString(16), '100000000')
+    b.rshift(1)
+    assert.equal(b.toString(16), '80000000')
+  })
+
 });

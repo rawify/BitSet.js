@@ -150,6 +150,14 @@ Mutable; Toggles a portion of a given bitset
 - If one param is given, the bit at the index is toggled
 - If two params are given, the bits in the given range are toggled
 
+BitSet lshift(count)
+---
+Mutable; Shifts bits left
+
+BitSet rshift(count)
+---
+Mutable; Shifts bits right, without sign extension
+
 BitSet not()
 ---
 Immutable; Calculates the bitwise complement

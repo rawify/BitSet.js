@@ -447,6 +447,18 @@ export declare class BitSet implements ReadOnlyBitSet
     public set(index?: number, value?: number): BitSet;
 
     /**
+     * Shift bits left by some number of bits.
+     * @param {number} count The number of bits to shift
+     */
+    public lshift(count: number): BitSet;
+
+    /**
+     * Shift bits right by some number of bits, without sign extension.
+     * @param {number} count The number of bits to shift
+     */
+    public rshift(count: number): BitSet;
+
+    /**
      * Set a range of bits
      *
      * Ex:
