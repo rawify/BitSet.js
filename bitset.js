@@ -996,7 +996,7 @@
       return BitSet;
     });
   } else if (typeof exports === 'object') {
-    Object.defineProperty(exports, "__esModule", { 'value': true });
+    Object.defineProperty(BitSet, "__esModule", { 'value': true });
     BitSet['default'] = BitSet;
     BitSet['BitSet'] = BitSet;
     module['exports'] = BitSet;
