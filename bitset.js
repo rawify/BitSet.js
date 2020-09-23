@@ -976,7 +976,7 @@
     // Create an bitset instance
     var s = Object.create(BitSet.prototype);
 
-    // Fill the vector with random data, uniformally distributed
+    // Fill the vector with random data, uniformly distributed
     for (var i = 0; i < len; i++) {
       t.push(Math.random() * 4294967296 | 0);
     }
