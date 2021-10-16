@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-BitSet.js is an infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) (aka bit vector, bit string, bit set) implementation in JavaScript. That means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the most performant implementation to date.
+BitSet.js is an infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) (aka bit vector, bit string, bit set) implementation in JavaScript. Infinite means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the most performant implementation to date.
 
 Examples
 ===
