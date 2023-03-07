@@ -114,7 +114,7 @@ Functions
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
 
 
-BitSet set(ndx[, value=0])
+BitSet set(ndx[, value=1])
 ---
 Mutable; Sets value 0 or 1 to index `ndx` of the bitset
 
