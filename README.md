@@ -62,10 +62,6 @@ console.log("0" + user.toString(8) + group.toString(8) + world.toString(8));
 ```
 npm install bitset
 ```
-or
-```
-bower install bitset.js
-```
 
 ## Using BitSet.js with the browser
 
