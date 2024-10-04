@@ -1,25 +1,23 @@
 # BitSet.js
 
-[![NPM Package](https://nodei.co/npm-dl/bitset.png?months=6&height=1)](https://npmjs.org/package/bitset)
-
-[![Build Status](https://travis-ci.org/infusion/BitSet.js.svg)](https://travis-ci.org/infusion/BitSet.js)
+[![NPM Package](https://img.shields.io/npm/v/bitset.svg?style=flat)](https://npmjs.org/package/bitset "View this project on npm")
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+
 
 BitSet.js is an infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) (aka bit vector, bit string, bit set) implementation in JavaScript. Infinite means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the most performant implementation to date.
 
-Examples
-===
+## Examples
 
-Basic usage
----
+###Basic usage
+
 ```javascript
 let bs = new BitSet;
 bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
 ```
 
-Flipping bits
----
+###Flipping bits
+
 ```javascript
 let bs = new BitSet;
 bs
@@ -33,15 +31,15 @@ if (str === "111111111111111111111111111000000011111111111111111111111111111") {
 }
 ```
 
-Range Set
----
+###Range Set
+
 ```javascript
 let bs = new BitSet;
 bs.setRange(10, 18, 1); // Set a 1 between 10 and 18, inclusive
 ```
 
-User permissions
----
+###User permissions
+
 If you want to store user permissions in your database and use BitSet for the bit twiddling, you can start with the following Linux-style snippet:
 ```javascript
 let P_READ  = 2; // Bit pos
@@ -58,8 +56,8 @@ let world = new BitSet(P_EXEC);
 console.log("0" + user.toString(8) + group.toString(8) + world.toString(8));
 ```
 
-Installation
-===
+##Installation
+
 
 ```
 npm install bitset
@@ -69,8 +67,8 @@ or
 bower install bitset.js
 ```
 
-Using BitSet.js with the browser
-===
+##Using BitSet.js with the browser
+
 ```html
 <script src="bitset.js"></script>
 <script>
@@ -78,8 +76,8 @@ Using BitSet.js with the browser
 </script>
 ```
 
-Using BitSet.js with require.js
-===
+##Using BitSet.js with require.js
+
 ```html
 <script src="require.js"></script>
 <script>
@@ -90,8 +88,8 @@ function(BitSet) {
 </script>
 ```
 
-Constructor
-===
+##Constructor
+
 The default `BitSet` constructor accepts a single value of one the following types :
 
 - String
@@ -108,118 +106,118 @@ The default `BitSet` constructor accepts a single value of one the following typ
   - A BitSet object, which get copied over
 
 
-Functions
-===
+##Functions
+
 
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
 
 
-BitSet set(ndx[, value=1])
----
+###BitSet set(ndx[, value=1])
+
 Mutable; Sets value 0 or 1 to index `ndx` of the bitset
 
 int get(ndx)
 ---
 Gets the value at index ndx
 
-BitSet setRange(from, to[, value=1])
----
+###BitSet setRange(from, to[, value=1])
+
 Mutable; Helper function for set, to set an entire range to a given value
 
-BitSet clear([from[, to]])
----
+###BitSet clear([from[, to]])
+
 Mutable; Sets a portion of a given bitset to zero
 
 - If no param is given, the whole bitset gets cleared
 - If one param is given, the bit at this index gets cleared
 - If two params are given, the range is cleared
 
-BitSet slice([from[, to]])
----
+###BitSet slice([from[, to]])
+
 Immutable; Extracts a portion of a given bitset as a new bitset
 
 - If no param is given, the bitset is getting cloned
 - If one param is given, the index is used as offset
 - If two params are given, the range is returned as new BitSet
 
-BitSet flip([from[, to]])
----
+###BitSet flip([from[, to]])
+
 Mutable; Toggles a portion of a given bitset
 
 - If no param is given, the bitset is inverted
 - If one param is given, the bit at the index is toggled
 - If two params are given, the bits in the given range are toggled
 
-BitSet not()
----
+###BitSet not()
+
 Immutable; Calculates the bitwise complement
 
-BitSet and(Mixed x)
----
+###BitSet and(Mixed x)
+
 Immutable; Calculates the bitwise intersection of two bitsets
 
-BitSet or(Mixed x)
----
+###BitSet or(Mixed x)
+
 Immutable; Calculates the bitwise union of two bitsets
 
-BitSet xor(Mixed x)
----
+###BitSet xor(Mixed x)
+
 Immutable; Calculates the bitwise xor between two bitsets
 
-BitSet andNot(Mixed x)
----
+###BitSet andNot(Mixed x)
+
 Immutable; Calculates the bitwise difference of two bitsets (this is not the nand operation!)
 
-BitSet clone()
----
+###BitSet clone()
+
 Immutable; Clones the actual object
 
-Array toArray()
----
+###Array toArray()
+
 Returns an array with all indexes set in the bitset
 
-String toString([base=2])
----
+###String toString([base=2])
+
 Returns a string representation with respect to the base
 
-int cardinality()
----
+###int cardinality()
+
 Calculates the number of bits set
 
-int msb()
----
+###int msb()
+
 Calculates the most significant bit (the left most)
 
-int ntz()
----
+###int ntz()
+
 Calculates the number of trailing zeros (zeros on the right). If all digits are zero, `Infinity` is returned, since BitSet.js is an arbitrary large bit vector implementation.
 
-int lsb()
----
+###int lsb()
+
 Calculates the least significant bit (the right most)
 
-bool isEmpty()
----
+###bool isEmpty()
+
 Checks if the bitset has all bits set to zero
 
-bool equals()
----
+###bool equals()
+
 Checks if two bitsets are the same
 
-BitSet.fromBinaryString(str)
----
+###BitSet.fromBinaryString(str)
+
 Alternative constructor to pass with a binary string
 
-BitSet.fromHexString(str)
----
+###BitSet.fromHexString(str)
+
 Alternative constructor to pass a hex string
 
-BitSet.Random([n=32])
----
+###BitSet.Random([n=32])
+
 Create a random BitSet with a maximum length of n bits
 
-Iterator Interface
-===
+##Iterator Interface
+
 A `BitSet` object is iterable. The iterator gets all bits up to the most significant bit. If no bits are set, the iteration stops immediately.
 
 ```js
@@ -231,28 +229,29 @@ for (let b of bs) {
 
 Note: If the bitset is inverted so that all leading bits are 1, the iterator must be stopped by the user!
 
-Coding Style
-===
+
+##Coding Style
+
 As every library I publish, BitSet.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
 
-Build the library
-===
-Gulp is optional for minifying with Google Closure Compiler. After cloning the Git repository, do:
+##Building the library
+
+After cloning the Git repository run:
 
 ```
 npm install
-gulp
+npm run build
 ```
 
-Run a test
-===
+##Run a test
+
 Testing the source against the shipped test suite is as easy as
 
 ```
-npm test
+npm run test
 ```
 
-Copyright and licensing
-===
-Copyright (c) 2014-2023, [Robert Eisele](https://raw.org/)
-Dual licensed under the MIT or GPL Version 2 licenses.
+## Copyright and licensing
+
+Copyright (c) 2025, [Robert Eisele](https://raw.org/)
+Licensed under the MIT license.
