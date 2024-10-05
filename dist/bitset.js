@@ -982,8 +982,7 @@ BitSet['Random'] = function (n) {
   return s;
 };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = BitSet;
-module.exports = BitSet; 
+Object.defineProperty(BitSet, "__esModule", { 'value': true });
+BitSet['default'] = BitSet;
+BitSet['BitSet'] = BitSet;
+module['exports'] = BitSet;
