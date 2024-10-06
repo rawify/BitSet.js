@@ -982,5 +982,5 @@ BitSet['Random'] = function (n) {
   return s;
 };
 export {
-  BitSet as default
+  BitSet as default, BitSet
 };
