@@ -1,7 +1,7 @@
 {
     "name": "bitset",
     "title": "BitSet",
-    "version": "5.2.2",
+    "version": "5.2.3",
     "homepage": "https://raw.org/article/javascript-bit-array/",
     "bugs": "https://github.com/rawify/BitSet.js/issues",
     "description": "A performance optimized infinite bit vector library",
@@ -60,7 +60,7 @@
         "test": "mocha tests/*.js"
     },
     "devDependencies": {
-        "crude-build": "^0.0.4",
+        "crude-build": "^0.1.0",
         "mocha": "*"
     }
 }
