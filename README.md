@@ -275,7 +275,7 @@ Note: If the bitset is inverted so that all leading bits are 1, the iterator mus
 
 After cloning the Git repository run:
 
-```
+```bash
 npm install
 npm run build
 ```
@@ -284,7 +284,7 @@ npm run build
 
 Testing the source against the shipped test suite is as easy as
 
-```
+```bash
 npm run test
 ```
 
