@@ -4,13 +4,17 @@
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 
-BitSet.js is an infinite [Bit-Array](http://en.wikipedia.org/wiki/Bit_array) (aka bit vector, bit string, bit set) implementation in JavaScript. Infinite means that if you invert a bit vector, the leading ones get remembered. As far as I can tell, BitSet.js is the only library which has this feature. It is also heavily benchmarked against other implementations and is the most performant implementation to date.
+BitSet.js is published as [`bitset`](https://www.npmjs.com/package/bitset). It implements arbitrary-length [bit arrays](http://en.wikipedia.org/wiki/Bit_array) and can also represent an infinite leading run of ones after complementing a value.
+
+Use it for compact integer-indexed sets, masks wider than JavaScript's 32-bit bitwise operators, and immutable bitwise combinations. Use `Set<number>` when members are sparse, non-integer, or routinely enumerated, and use `BigInt` when a single finite integer plus native arithmetic is the primary representation.
 
 ## Examples
 
 ### Basic usage
 
 ```javascript
+import BitSet from 'bitset';
+
 let bs = new BitSet;
 bs.set(128, 1); // Set bit at position 128
 console.log(bs.toString(16)); // Print out a hex dump with one bit set
@@ -58,31 +62,56 @@ console.log("0" + user.toString(8) + group.toString(8) + world.toString(8));
 
 ## Installation
 
+You can install `BitSet.js` via npm:
 
-```
+```bash
 npm install bitset
 ```
 
-## Using BitSet.js with the browser
+Or with yarn:
+
+```bash
+yarn add bitset
+```
+
+Alternatively, download or clone the repository:
+
+```bash
+git clone https://github.com/rawify/BitSet.js
+```
+
+## Usage
+
+Include the `bitset.min.js` file in your project:
 
 ```html
-<script src="bitset.js"></script>
+<script src="path/to/bitset.min.js"></script>
 <script>
-    console.log(BitSet("111"));
+  console.log(BitSet("1111"));
 </script>
 ```
 
-## Using BitSet.js with require.js
+Or in a Node.js project:
 
-```html
-<script src="require.js"></script>
-<script>
-requirejs(['bitset.js'],
-function(BitSet) {
-    console.log(BitSet("1111"));
-});
-</script>
+```javascript
+const BitSet = require('bitset');
 ```
+
+or
+
+```javascript
+import BitSet from 'bitset';
+```
+
+Version 5.3.0 is implemented in strict TypeScript and has no runtime dependencies. It ships dedicated CommonJS, ES module, browser-global, browser-ESM, and generated TypeScript declaration entry points without declaring a minimum Node.js version.
+
+| Environment | Entry point |
+| --- | --- |
+| CommonJS | `require('bitset')` |
+| ES module | `import BitSet from 'bitset'` |
+| Browser global | `dist/bitset.min.js` exposes `BitSet` |
+| Browser ES module | `dist/bitset.min.mjs` |
+| TypeScript | Generated declarations in `dist/` |
 
 ## Constructor
 
@@ -106,6 +135,22 @@ The default `BitSet` constructor accepts a single value of one the following typ
 
 
 The data type Mixed can be either a BitSet object, a String or an integer representing a native bitset with 31 bits.
+
+Bit positions are zero-based, non-negative integer indices. `set()`, `setRange()`, `clear()`, and `flip()` mutate and return the receiver; bitwise operations such as `and()`, `or()`, `xor()`, `andNot()`, and `not()` return new instances.
+
+An unbounded complement has infinitely many set bits: `cardinality()` and `msb()` return `Infinity`, while `toArray()` appends `Infinity` as a sentinel. Its bit-by-bit iterator is endless and therefore requires an explicit stopping condition. Use `slice(from, to)` first when a finite window is required.
+
+## Performance
+
+The implementation keeps packed 32-bit words in monomorphic JavaScript arrays, uses four-word population counts, unrolled bitwise loops, low-bit extraction for enumeration, and direct range masks. Immutable operations allocate only their result and never mutate an operand.
+
+Run the reproducible comparison against the latest `fastbitset` release from npm with:
+
+```bash
+npm run benchmark
+```
+
+The benchmark covers construction, single-bit access, population count, enumeration, cloning, and immutable AND, OR, XOR, and AND-NOT operations. Results vary by JavaScript engine and hardware, so each operation is reported separately together with a geometric overall ratio.
 
 
 ### BitSet set(ndx[, value=1])
@@ -226,10 +271,6 @@ for (let b of bs) {
 Note: If the bitset is inverted so that all leading bits are 1, the iterator must be stopped by the user!
 
 
-## Coding Style
-
-As every library I publish, BitSet.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
-
 ## Building the library
 
 After cloning the Git repository run:
@@ -249,5 +290,5 @@ npm run test
 
 ## Copyright and Licensing
 
-Copyright (c) 2024, [Robert Eisele](https://raw.org/)
+Copyright (c) 2026, [Robert Eisele](https://raw.org/)
 Licensed under the MIT license.

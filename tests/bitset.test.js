@@ -1,6 +1,7 @@
 
 const BitSet = require('bitset');
 const assert = require('assert');
+const { describe, it } = require('node:test');
 
 describe('BitSet', function () {
 
@@ -344,7 +345,7 @@ describe('BitSet', function () {
     assert.equal(bsb.toString(), '100000000000000000000000000000000');
   });
 
-  it('should pass setting in time', function (done) {
+  it('should pass setting in time', function () {
 
     var bs = new BitSet;
     var start = Date.now();
@@ -352,7 +353,6 @@ describe('BitSet', function () {
       bs.set(i);
     }
     assert((Date.now() - start) < 50);
-    done();
 
   });
 

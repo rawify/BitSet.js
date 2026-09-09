@@ -1,18 +1,19 @@
 {
     "name": "bitset",
     "title": "BitSet",
-    "version": "5.2.3",
+    "version": "5.3.0",
+    "type": "commonjs",
+    "description": "Fast arbitrary-length and infinite-complement bit sets with ranges, iteration, and bitwise operations",
     "homepage": "https://raw.org/article/javascript-bit-array/",
     "bugs": "https://github.com/rawify/BitSet.js/issues",
-    "description": "A performance optimized infinite bit vector library",
     "keywords": [
         "bits",
         "set",
         "twiddle",
-        "bit set",
-        "bit array",
-        "bit vector",
-        "bit string",
+        "bit-set",
+        "bit-array",
+        "bit-vector",
+        "bit-string",
         "bitset",
         "bitarray",
         "bitvector",
@@ -24,20 +25,43 @@
     "private": false,
     "main": "./dist/bitset.js",
     "module": "./dist/bitset.mjs",
-    "types": "./bitset.d.ts",
     "browser": "./dist/bitset.min.js",
     "unpkg": "./dist/bitset.min.js",
-    "readmeFilename": "README.md",
+    "jsdelivr": "./dist/bitset.min.js",
+    "types": "./dist/bitset.d.ts",
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
     "exports": {
         ".": {
-            "types": "./bitset.d.ts",
-            "require": "./dist/bitset.js",
-            "import": "./dist/bitset.mjs"
-        }
+            "import": {
+                "types": "./dist/bitset.d.mts",
+                "default": "./dist/bitset.mjs"
+            },
+            "require": {
+                "types": "./dist/bitset.d.ts",
+                "default": "./dist/bitset.js"
+            },
+            "default": {
+                "types": "./dist/bitset.d.ts",
+                "default": "./dist/bitset.js"
+            }
+        },
+        "./browser": {
+            "import": {
+                "types": "./dist/bitset.d.mts",
+                "default": "./dist/bitset.min.mjs"
+            },
+            "default": "./dist/bitset.min.js"
+        },
+        "./package.json": "./package.json"
     },
+    "sideEffects": false,
     "repository": {
         "type": "git",
-        "url": "git@github.com:rawify/BitSet.js.git"
+        "url": "git+ssh://git@github.com/rawify/BitSet.js.git"
     },
     "funding": {
         "type": "github",
@@ -49,18 +73,24 @@
         "url": "https://raw.org/"
     },
     "license": "MIT",
-    "engines": {
-        "node": "*"
-    },
     "directories": {
         "test": "tests"
     },
     "scripts": {
-        "build": "crude-build BitSet",
-        "test": "mocha tests/*.js"
+        "clean": "node scripts/clean.mjs",
+        "typecheck": "tsc --noEmit",
+        "build:types": "tsc -p tsconfig.build.json",
+        "build:js": "node scripts/build.mjs",
+        "build": "npm run clean && npm run build:types && npm run build:js",
+        "benchmark": "node benchmark/benchmark.js",
+        "test:types": "tsc -p tests/types/tsconfig.json",
+        "test:runtime": "node --test tests/*.test.js",
+        "test": "npm run build && npm run test:types && npm run test:runtime",
+        "prepublishOnly": "npm test"
     },
     "devDependencies": {
-        "crude-build": "^0.1.0",
-        "mocha": "*"
+        "esbuild": "^0.25.9",
+        "fastbitset": "^0.5.2",
+        "typescript": "^5.9.2"
     }
 }

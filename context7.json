@@ -1,0 +1,6 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "BitSet.js",
+  "description": "Infinite bit vectors with mutable bit operations, immutable set algebra, ranges, and serialization.",
+  "excludeFolders": ["dist", "node_modules", "coverage", "_"]
+}
