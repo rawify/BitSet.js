@@ -384,12 +384,12 @@ BitSet.prototype = {
     const s = from & WORD_LENGTH - 1;
     const e = to & WORD_LENGTH - 1;
     if (w0 === w1) {
-      data[w0] ^= ~0 << s & (1 << e + 1) - 1;
+      data[w0] ^= ~0 << s & -1 >>> 31 - e;
       return this;
     }
     data[w0] ^= ~0 << s;
     for (let w = w0 + 1; w < w1; w++) data[w] ^= -1;
-    data[w1] ^= (1 << e + 1) - 1;
+    data[w1] ^= -1 >>> 31 - e;
     return this;
   },
   /**
@@ -425,12 +425,12 @@ BitSet.prototype = {
     const s = from & WORD_LENGTH - 1;
     const e = to & WORD_LENGTH - 1;
     if (w0 === w1) {
-      data[w0] &= ~(~0 << s & (1 << e + 1) - 1);
+      data[w0] &= ~(~0 << s & -1 >>> 31 - e);
       return this;
     }
     data[w0] &= ~(~0 << s);
     for (let w = w0 + 1; w < w1; w++) data[w] = 0;
-    data[w1] &= ~((1 << e + 1) - 1);
+    data[w1] &= ~(-1 >>> 31 - e);
     return this;
   },
   /**
@@ -522,7 +522,7 @@ BitSet.prototype = {
     const w0 = from >>> WORD_LOG, w1 = to >>> WORD_LOG;
     const s = from & 31, e = to & 31;
     if (w0 === w1) {
-      const m = ~0 << s & (1 << e + 1) - 1;
+      const m = ~0 << s & -1 >>> 31 - e;
       if (setToOne) data[w0] |= m;
       else data[w0] &= ~m;
       return this;
@@ -530,11 +530,11 @@ BitSet.prototype = {
     if (setToOne) {
       data[w0] |= ~0 << s;
       for (let w = w0 + 1; w < w1; w++) data[w] = -1;
-      data[w1] |= (1 << e + 1) - 1;
+      data[w1] |= -1 >>> 31 - e;
     } else {
       data[w0] &= ~(~0 << s);
       for (let w = w0 + 1; w < w1; w++) data[w] = 0;
-      data[w1] &= ~((1 << e + 1) - 1);
+      data[w1] &= ~(-1 >>> 31 - e);
     }
     return this;
   },
