@@ -197,6 +197,17 @@ describe('BitSet', function () {
     assert.equal(bs.slice(1, 3).toString(), '101');
   });
 
+  it('should set every bit in a range ending at a 32-bit word boundary', function () {
+
+    var bs = new BitSet;
+
+    bs.setRange(0, 31, 1);
+
+    for (var i = 0; i <= 31; i++) {
+      assert.equal(bs.get(i), 1, 'bit ' + i + ' should be set');
+    }
+  });
+
   it('should setRange 2', function () {
 
     var bs = new BitSet;
