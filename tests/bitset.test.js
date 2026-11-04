@@ -197,6 +197,55 @@ describe('BitSet', function () {
     assert.equal(bs.slice(1, 3).toString(), '101');
   });
 
+  it('should set every bit in a range ending at a 32-bit word boundary', function () {
+
+    var bs = new BitSet;
+
+    bs.setRange(0, 31, 1);
+
+    for (var i = 0; i <= 31; i++) {
+      assert.equal(bs.get(i), 1, 'bit ' + i + ' should be set');
+    }
+  });
+
+  it('should update ranges across 32-bit word boundaries', function () {
+
+    var ranges = [[0, 30], [0, 31], [5, 31], [31, 31], [0, 32], [5, 63], [32, 63], [31, 95]];
+    var operations = ['set', 'unset', 'clear', 'flip'];
+
+    for (var range of ranges) {
+      for (var operation of operations) {
+        var actual = new BitSet;
+        var expected = new BitSet;
+
+        for (var i = 0; i < 128; i += 3) {
+          actual.set(i, 1);
+          expected.set(i, 1);
+        }
+
+        if (operation === 'set') {
+          actual.setRange(range[0], range[1], 1);
+        } else if (operation === 'unset') {
+          actual.setRange(range[0], range[1], 0);
+        } else if (operation === 'clear') {
+          actual.clear(range[0], range[1]);
+        } else {
+          actual.flip(range[0], range[1]);
+        }
+
+        for (var i = range[0]; i <= range[1]; i++) {
+          if (operation === 'flip') {
+            expected.set(i, expected.get(i) ? 0 : 1);
+          } else {
+            expected.set(i, operation === 'set' ? 1 : 0);
+          }
+        }
+
+        assert.deepEqual(actual.toArray(), expected.toArray(), operation + ' ' + range.join('-'));
+      }
+    }
+  });
+
   it('should setRange 2', function () {
 
     var bs = new BitSet;
